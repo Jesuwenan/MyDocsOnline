@@ -1,13 +1,13 @@
 <template>
-  <div class="mt-8">
+<div class="mt-8">
     <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="px-4 sm:px-6 md:px-0">
+        <div class="px-4 sm:px-6 md:px-0">
         <div class="pb-5 border-b border-gray-200 sm:flex sm:items-center sm:justify-between">
             <nav class="flex" aria-label="Breadcrumb">
                 <ol class="flex items-center space-x-4">
                     <li>
                         <div class="flex items-center">
-                            <inertia-link class="text-3xl font-extrabold text-gray-900" :href="route('documents.index')">Documents</inertia-link>
+                            <inertia-link class="text-3xl font-extrabold text-gray-900" :href="route('groupe.index')">Groupes</inertia-link>
                         </div>
                     </li>
 
@@ -15,9 +15,9 @@
                         <div class="flex items-center">
                             <!-- Heroicon name: solid/chevron-right -->
                             <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/>
                             </svg>
-                            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Créer un document</a>
+                            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Créer un groupe</a>
                         </div>
                     </li>
                 </ol>
@@ -29,94 +29,21 @@
                 <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
 
-
                         <div class="col-span-3 sm:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700" for="titre">Titre *:</label>
-                            <input v-model="form.titre" ref="titre" name="titre" id="titre" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
-                            <div v-if="errors.titre" class="text-red-700 mt-2 text-sm">{{ errors.titre }}</div>
-                        </div>
-
-                        <div class="col-span-3 sm:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700" for="auteur">Auteur *:</label>
-                            <input v-model="form.auteur" ref="auteur" name="auteur" id="auteur" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
-                            <div v-if="errors.auteur" class="text-red-700 mt-2 text-sm">{{ errors.auteur }}</div>
+                            <label class="block text-sm font-medium text-gray-700" for="titre">Nom du groupe *:</label>
+                            <input v-model="form.group" ref="titre" name="titre" id="titre" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text" />
+                            <!-- <div v-if="errors.group" class="text-red-700 mt-2 text-sm">{{ errors.group }}</div> -->
                         </div>
 
-                        <div class="col-span-3 sm:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700" for="Categorie">Categorie *:</label>
-                            <VueMultiselect
-                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                v-model="form.category" 
-                                :multiple="false" 
-                                open-direction="bottom"
-                                :option-height="100"
-                                :options="categories">
-                            </VueMultiselect>
-                            <div v-if="errors.categorie" class="text-red-700 mt-2 text-sm">{{ errors.categorie }}</div>
-                        </div>
-                        
-                        <div class="col-span-3 sm:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700" for="Categorie">Date *:</label>
-                            <input v-model="form.date" ref="date" name="date" id="date" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="date"  />
-                            <div v-if="errors.date" class="text-red-700 mt-2 text-sm">{{ errors.date }}</div>
-                        </div>
-
-                        <div class="col-span-3 sm:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700" for="Categorie">Slug *:</label>
-                            <input v-model="form.slug" ref="slug" name="slug" id="slug" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
-                            <div v-if="errors.slug" class="text-red-700 mt-2 text-sm">{{ errors.slug }}</div>
-                        </div>
-
-                        <div class="col-span-3 sm:col-span-3">
-                            <label class="block text-sm font-medium text-gray-700" for="Categorie">Mot de passe *:</label>
-                            <input v-model="form.password" ref="password" name="password" id="password" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="password"  />
-                            <div v-if="errors.password" class="text-red-700 mt-2 text-sm">{{ errors.password }}</div>
-                        </div>
-
-                        
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium text-gray-700" for="first_name">Description *:</label>
-                            <input v-model="form.description" name="description" id="description" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
-                            <div v-if="errors.description" class="text-red-700 mt-2 text-sm">{{ errors.description }}</div>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium text-gray-700" for="first_name">Fichier *:</label>
-                            <file-pond
-                            name="file"
-                            ref="pond"
-                            label-idle="Cliquer/Glisser et déposer ici votre document..."
-                            labelFileProcessingComplete="Effectué"
-                            labelFileProcessing="En cours"
-                            labelFileLoading="Chargement"
-                            labelTapToCancel="Annuler"
-                            labelTapToRetry="Réeassayer"
-                            labelInvalidField="Fichier invalide"
-                            labelTapToUndo="Supprimer"
-                            labelMaxFileSizeExceeded="Image trop grande"
-                            labelMaxFileSize="La taille maximum est de 200MB"
-                            maxFileSize="200MB"
-                            v-bind:allow-multiple="false"
-                            v-bind:required="false"
-                            accepted-file-types="application/pdf,image/jpeg, image/png"
-                            server="/filepond/api/process"
-                            v-on:init="handleFilePondInit"
-                            :allowBrowse="true"
-                            :allowFileEncode="true"
-                            :captureMethod="null"
-                            @processfile="processFile"
-                            @removefile="removeFile"
-                            @addfile="addFile"/>
-                        </div>
-                        
+                                                
                     </div>
                 </div>
                 <div class="px-8 py-4 bg-gray-100 border-t border-gray-200 flex justify-end items-center">
                     <loading-button :loading="sending" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">Enregistrer</loading-button>
                 </div>
             </form>
+
         </div>
-
-
         </div>
     </div>
 </div>
@@ -130,27 +57,8 @@ import SelectInput from '@/Shared/SelectInput'
 import VueMultiselect from 'vue-multiselect'
 import { VueTelInput } from 'vue3-tel-input'
 import 'vue3-tel-input/dist/vue3-tel-input.css'
-import vueFilePond from 'vue-filepond';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
-import 'filepond-plugin-image-pdf-overlay/dist/filepond-plugin-image-overlay.min.css';
-import FilePondPluginImageOverlay from 'filepond-plugin-image-pdf-overlay';
-import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.min.css';
-import FilePondPluginGetFile from 'filepond-plugin-get-file';
-import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
-import FilePondPluginPdfPreview from "filepond-plugin-pdf-preview";
-// import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-// import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import { QuillEditor } from '@vueup/vue-quill'
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
-const FilePond = vueFilePond(
-    FilePondPluginFileValidateType,
-    FilePondPluginImageOverlay,
-    FilePondPluginGetFile,
-    FilePondPluginFileValidateSize,
-    FilePondPluginPdfPreview,
-);
+
 export default {
     
     components: {
@@ -158,11 +66,10 @@ export default {
         TextInput,
         SelectInput, 
         VueMultiselect,
-        VueTelInput,
-        FilePond       
+        VueTelInput,      
     },
     props: {
-        people: Array,
+        person: Object,
         categories: Object,
         errors: Object,
     },
@@ -180,17 +87,14 @@ export default {
             selected: null,
             autocomplete: null,
             currentTab : 'details',
-
         }
     },
     
     methods: {
         submit() {
-            
-            this.$inertia.post(this.route('documents.store'), this.form, {
+            this.$inertia.post(this.route('groupe.store'), this.form, {
                 onStart: () => this.sending = true,
-                onFinish: () => this.sending = false,
-                
+                onFinish: () => this.sending = false  
             })
         },
         processFile(e, f) {

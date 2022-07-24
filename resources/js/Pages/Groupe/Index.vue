@@ -1,0 +1,365 @@
+<template>
+    <div class="mt-8" v-on:keyup.enter="confirm()" v-on:keyup.esc="cancel()">
+        <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="px-4 sm:px-6 md:px-0">
+                <div class="pb-5 sm:flex sm:items-center sm:justify-between">
+
+
+                    <div class="flex">
+
+                        <h3 class="text-3xl font-extrabold text-gray-900">
+                            Groupes
+                        </h3>
+
+                        <div class="mt-3 sm:mt-0 sm:ml-4">
+                            <inertia-link
+                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                :href="route('groupe.create')">
+                                Ajouter un nouveau groupe
+                            </inertia-link>
+                        </div>
+                    </div>
+                    <div v-show="fullScreenModalIsOpen">
+                        <full-screen-modal @closeFullSreenModal='closeFullSreenModal()'
+                            :is-open="fullScreenModalIsOpen">
+                            <template #content>
+                                <form @submit.prevent="submit">
+                                <div class="px-4 py-5 bg-white sm:p-6 border-2 rounded-lg ">
+                                    <h3 class="text-xl font-extrabold mb-4 text-gray-700">Ajouter un membre :</h3>
+                                <div class="col-span-3 sm:col-span-3">
+                                    <VueMultiselect
+                                    class="mt-1 mb-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                    v-model="form.username" 
+                                    :multiple="true" 
+                                    open-direction="bottom"
+                                    :option-height="100"
+                                    :options="person">
+                                    </VueMultiselect>
+                            <!-- <div v-if="errors.person" class="text-red-700 mt-2 text-sm">{{ errors.categorie }}</div> -->
+                                </div>
+                                    <button
+                                        class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Valider
+                                    </button>
+                                </div>
+                            </form>
+                            </template>
+                        </full-screen-modal>
+                    </div>
+                    <div class="mt-3 sm:mt-0 sm:ml-4">
+                    </div>
+                </div>
+
+                <!-- This example requires Tailwind CSS v2.0+ -->
+                <div class="flex flex-col">
+                    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+
+                            <div class="flex ">
+
+
+
+                                <div class="w-1/4 mr-3">
+                                    <div class="pb-4">
+                                        <div class="mt-1 relative rounded-md z-10">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                            </div>
+                                            <input v-model="form.search" type="text"
+                                                class="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+                                                placeholder="Rechercher">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="w-1/4 mr-3">
+                                    <div class="pb-4">
+                                        <div class="mt-1 relative rounded-md z-10">
+
+                                            <!-- <VueMultiselect
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                                v-model="form.company" :multiple="false"
+                                                placeholder="Selectionner une catégorie" open-direction="bottom"
+                                                :option-height="200" track-by="id" label="name" :options="document">
+                                            </VueMultiselect> -->
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="w-1/4 mr-3">
+                                    <div class="pb-4">
+                                        <div class="mt-1 relative rounded-md z-10">
+
+                                            <!-- <VueMultiselect
+                                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                                v-model="form.event" :multiple="false"
+                                                placeholder="Selectionner un évènement" open-direction="bottom"
+                                                :option-height="200" track-by="id" label="name" :options="events">
+                                            </VueMultiselect> -->
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="w-1/4">
+                                    <div class="pb-4">
+                                        <div class="mt-1 relative rounded-md z-10">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="shadow border-b border-gray-200 sm:rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200 ">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+
+                                            <th scope="col" class="relative px-6 py-3">
+                                                <span class="sr-only">Actions</span>
+                                            </th>
+                                            <th scope="col"
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Nom du groupe
+                                            </th>
+                                        
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Odd row -->
+                                        <tr v-for="groupe in groupes.data" :key="groupe.id" class="bg-white">
+
+                                            <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
+                                                <inertia-link class="outline-none text-indigo-600 hover:text-indigo-900"
+                                                    :href="route('groupe.edit', groupe.id)" style="display: inline">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor"
+                                                        style="display: inline">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                    </svg>
+                                                </inertia-link>
+
+                                                <button :loading="sending"
+                                                    class="outline-none text-indigo-600 hover:text-indigo-900"
+                                                    style="display: inline" type="button" @click="destroy(groupe.id)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor"
+                                                        style="display: inline">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                    </svg>
+                                                </button>
+
+                                                <button :loading="sending"
+                                                    class="outline-none text-indigo-600 hover:text-indigo-900 align-middle ml-1"
+                                                    style="display: inline" type="button" @click="showAddUserRequest(groupe.id)">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="CurrentColor" 
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                                                </button>
+                                            </td>
+
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                {{ groupe.group_name }}
+                                            </td>
+
+                                        </tr>
+                                        <tr v-if="groupes.data.length === 0">
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium"
+                                                colspan="10">Pas de
+                                                personnes.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+
+                            <!-- <pagination class="w-3/4" :links="participants.links" /> -->
+                        </div>
+                    </div>
+                </div>
+                
+
+                <confirmation-dialog v-if="showModal" :message="message" :title="title" :show="show"
+                    :closeable="closeable" @confirm="confirm()" />
+                <loading v-model:active="sending" :can-cancel="false" :is-full-page="true" />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import AppLayout from '@/Layouts/AppLayout'
+import Pagination from '@/Shared/Pagination'
+import FullScreenModal from '@/Shared/FullScreenModal'
+import throttle from 'lodash/throttle'
+import pickBy from 'lodash/pickBy'
+import ConfirmationDialog from '@/Shared/ConfirmationDialog'
+import Loading from 'vue-loading-overlay';
+import JetButton from '@/Jetstream/Button'
+import 'vue-loading-overlay/dist/vue-loading.css';
+import VueMultiselect from 'vue-multiselect'
+import LoadingButton from '@/Shared/LoadingButton'
+
+export default {
+    created() {
+        //console.log(this.filters)
+        //console.log(this.participants)
+        //console.log(this.total_participant)
+
+    },
+    components: {
+        Pagination,
+        ConfirmationDialog,
+        FullScreenModal,
+        Loading,
+        JetButton,
+        VueMultiselect,
+        LoadingButton
+    },
+    layout: AppLayout,
+    props: {
+        groupes: Object,
+        person: Object
+    },
+    data() {
+        return {
+            form: {
+                username: null
+            },
+        
+            message: null,
+            title: null,
+            show: {
+                default: true
+            },
+            closeable: {
+                default: true
+            },
+            showModal: false,
+            fullScreenModalIsOpen: false,
+            itemDeleteId: null,
+            sending: false,
+            list_selected: [],
+        }
+    },
+    methods: {
+
+        destroy(id) {
+            this.showModal = true
+            this.show.default = true
+            this.itemDeleteId = id
+            this.title = 'Confirmation de suppression'
+            this.message = 'Êtes-vous sûr de vouloir supprimer ce document?'
+        },
+
+        confirm(id) {
+            this.id = id
+            this.showModal = false
+            this.$inertia.delete(this.route('groupe.destroy', this.itemDeleteId));
+
+        },
+
+        closeFullSreenModal() {
+            this.fullScreenModalIsOpen = false
+        },
+
+        showAddUserRequest(id) {
+            this.fullScreenModalIsOpen = true
+            this.group_id = id
+        },
+
+        submit(id) {
+            console.log(this.form)
+            this.$inertia.post(this.route('groupe.addMemberToGroup', this.group_id), this.form, {
+                onStart: () => this.sending = true,
+                onFinish: () => this.sending = false  
+            })
+            this.fullScreenModalIsOpen = false
+            
+        },
+
+        
+        cancel() {
+            this.showModal = false
+            this.itemDeleteId = null
+            this.sms_participant_id = null
+            this.mail_participant_id = null
+            this.many_sms = false
+            this.many_mail = false
+            this.many_ticket = false
+            this.participant = null
+        },
+        sendMail(id) {
+            this.showModal = true
+            this.show.default = true
+            this.itemDeleteId = null
+            this.sms_participant_id = null
+            this.mail_participant_id = id
+            this.many_sms = false
+            this.many_mail = false
+            this.many_ticket = false
+            this.participant = null
+            this.title = 'Confirmation d\'envoi de mail'
+            this.message = 'Voulez-vous ré-envoyer l’invitation par e-mails ?'
+
+        },
+        sendSms(id) {
+            this.showModal = true
+            this.show.default = true
+            this.itemDeleteId = null
+            this.sms_participant_id = id
+            this.mail_participant_id = null
+            this.many_sms = false
+            this.many_mail = false
+            this.many_ticket = false
+            this.title = 'Confirmation d\'envoi de sms'
+            this.message = 'Voulez-vous ré-envoyer l’invitation par SMS ?'
+            this.participant = null
+
+        },
+        selectParticipant(participant) {
+            if (this.list_selected.length === 0) {
+                this.list_selected.push(participant)
+            } else {
+
+                let list_selected = this.list_selected
+                this.list_selected = []
+                list_selected.forEach(element => {
+                    if (element.selected)
+                        this.list_selected.push(element)
+                })
+                if (participant.selected)
+                    this.list_selected.push(participant)
+            }
+            //console.log(this.list_selected)
+        },
+    },
+
+    computed: {
+    },
+
+    mounted() {
+        if (this.form.event === null) {
+            this.events.forEach(event => {
+                if (event.status === 'In Progress')
+                    this.form.event = event
+            });
+        }
+
+    }
+}
+</script>
+
+<style src="vue-multiselect/dist/vue-multiselect.css">
+</style>

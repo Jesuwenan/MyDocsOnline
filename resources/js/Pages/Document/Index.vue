@@ -22,14 +22,65 @@
                     <div v-show="fullScreenModalIsOpen">
                         <full-screen-modal @closeFullSreenModal='closeFullSreenModal()' :is-open="fullScreenModalIsOpen">
                             <template #content>
-                                <div class="px-4 py-5 bg-white sm:p-6 border-2 rounded-lg ">
                                     
+                                    <div class="w-86 bg-white sm:p-6 border-2 rounded-lg ">        
                                         <h3 class="text-xl font-extrabold mb-4 text-gray-700">Partager:</h3>                               
-                                        <input v-model="share_form.username" placeholder="nom d'utilisateur" ref="username" name="username" id="username" class="mt-1 mb-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"/>
-                                        <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                            Partager
-                                        </button>
-                                </div>
+                                        <div class="block mt-3 col-span-12 sm:col-span-6">
+                                        <div class="inline m-2">
+                                            
+                                            <input value="groupe" v-model="selected"  id="selected" name="selected" type="radio" class="ml-1 focus:ring-green-500 h-4 w-4 text-green-600 border-gray-300">
+                                            <label for="group" class="ml-1 text-sm font-medium text-gray-700">
+                                                Partager dans un groupe
+                                            </label>
+                                        </div>
+                                        <div class="inline m-2">
+                                            
+                                            <input value="user" v-model="selected" id="selected" name="selected" type="radio" class="focus:ring-green-500 ml-1 h-4 w-4 text-green-600 border-gray-300">
+                                            <label for="user" class="ml-1 text-sm font-medium text-gray-700">
+                                                Partager à un utilisateur
+                                            </label>
+                                        </div>
+                                        </div>
+                                        <div class="col-span-12 sm:col-span-6" v-show="selected === 'user'">
+                                        <form @submit.prevent="submit">
+                                            
+                                            <VueMultiselect
+                                            class="mt-1 mb-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                            v-model="user_to_share_document" 
+                                            :multiple="false"
+                                            label = "username"
+                                            track-by = 'id'  
+                                            placeholder="Utilisateur"
+                                            open-direction="bottom"
+                                            :option-height="100"
+                                            :options="persons">
+                                            </VueMultiselect>
+                                            <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Partager
+                                            </button>
+                                        </form>
+                                        </div>
+                                        <div class="col-span-12 sm:col-span-6" v-show="selected === 'groupe'">
+                                        <form @submit.prevent="submit" v-show="selected === 'groupe'">
+                                            
+                                            <VueMultiselect
+                                            class="mt-1 mb-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                            v-model="group_to_share_document" 
+                                            :multiple="false"
+                                            label = "group_name"
+                                            track-by = 'id'
+                                            placeholder="Groupes" 
+                                            open-direction="bottom"
+                                            :option-height="100"
+                                            :options="groupes">
+                                            </VueMultiselect>
+                                            <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                                Partager
+                                            </button>
+                                        </form>
+                                        </div>
+                                        </div>
+                                    
                             </template>
                         </full-screen-modal>
                     </div>
@@ -150,7 +201,7 @@
                 
                 </div> -->
                             </div>
-                                <!-- {{ document}} -->
+                                <!-- {{ documents}} -->
                             <div class="shadow border-b border-gray-200 sm:rounded-lg">
                                 <table class="min-w-full divide-y divide-gray-200 ">
                                     <thead class="bg-gray-50">
@@ -204,8 +255,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Odd row -->
-                                        <tr v-for="documents in document" :key="documents.id"
+                                        
+                                        <tr v-for="document in documents" :key="document.id"
                                             class="bg-white">
 
                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -214,98 +265,73 @@
                                             </td>
                                             <td v-if="list_selected.length === 0"
                                                 class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
-                                                <!-- <button class="outline-none text-indigo-600 hover:text-indigo-900" style="display: inline" type="button" @click="sendTicket(participant)">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline">
-                                <polyline points="9 11 12 14 22 4"></polyline>
-                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-                                </svg>
-                            </button> -->
-                            
-                                                <!-- <a v-if="list_selected.length === 0"
-                                                    class="outline-none text-indigo-600 hover:text-indigo-900"
-                                                    :href="participant.ticket" style="display: inline" target="_blank">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
-                                                        stroke-linecap="round" stroke-linejoin="round"
+                                                    <inertia-link v-if="list_selected.length === 0"
+                                                        class="outline-none text-indigo-600 hover:text-indigo-900"
+                                                        :href="route('documents.edit', document.id)"
                                                         style="display: inline">
-                                                        <path
-                                                            d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71">
-                                                        </path>
-                                                        <path
-                                                            d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71">
-                                                        </path>
-                                                    </svg>
-                                                </a> -->
-                                                <!-- <button v-if="list_selected.length===0" class="outline-none text-indigo-600 hover:text-indigo-900" style="display: inline" type="button" @click="sendMail(participant.id)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline">
-                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                            <polyline points="22,6 12,13 2,6"></polyline>
-                        </svg>
-                        </button>
-                        <button v-if="list_selected.length===0" class="outline-none text-indigo-600 hover:text-indigo-900" style="display: inline" type="button" @click="sendSms(participant.id)">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline">
-                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
-                        </svg>
-                        </button> -->
-                                                <inertia-link v-if="list_selected.length === 0"
-                                                    class="outline-none text-indigo-600 hover:text-indigo-900"
-                                                    :href="route('documents.edit', documents.id)"
-                                                    style="display: inline">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                        style="display: inline">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                                    </svg>
-                                                </inertia-link>
-                                                <button v-if="list_selected.length === 0" :loading="sending"
-                                                    class="outline-none text-indigo-600 hover:text-indigo-900"
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            style="display: inline">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                                        </svg>
+                                                    </inertia-link>
+                                                    <button v-if="list_selected.length === 0" :loading="sending"
+                                                        class="outline-none text-indigo-600 hover:text-indigo-900"
+                                                        style="display: inline" type="button"
+                                                        @click="destroy(document.id)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor"
+                                                            style="display: inline">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                                        </svg>
+                                                    </button>
+                                                    
+                                                    <button :loading="sending"
+                                                    class="outline-none text-indigo-600 align-middle hover:text-indigo-900"
                                                     style="display: inline" type="button"
-                                                    @click="destroy(documents.id)">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none"
-                                                        viewBox="0 0 24 24" stroke="currentColor"
-                                                        style="display: inline">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                </button>
+                                                    @click="read(document.id)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke=" CurrentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                    </button>
+                                                    <button :loading="sending"
+                                                    class="outline-none text-indigo-600 align-middle hover:text-indigo-900"
+                                                    style="display: inline" type="button"
+                                                    @click="showShareFormDocument(document.id)">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="CurrentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>    
+                                                    </button>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ documents.titre }}
+                                                {{ document.titre }}
                                             </td>
                                             
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ documents.auteur }}
+                                                {{ document.auteur }}
                                             </td>
                                             
                                     
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ documents.category }}
+                                                {{ document.categorie.name }}
                                             </td>
                                             
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ documents.date }}
+                                                {{ document.date }}
                                             </td>
 
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                {{ documents.description }}
+                                                {{ document.description }}
                                             </td>
                                             
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                <button :loading="sending"
-                                                    class="outline-none text-indigo-600 hover:text-indigo-900"
-                                                    style="display: inline" type="button"
-                                                    @click="download(documents.id)">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#2563EB" stroke="##2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4M17 9l-5 5-5-5M12 12.8V2.5"/></svg>
-                                                </button>
+                                                
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                 <button :loading="sending"
                                                     class="outline-none text-indigo-600 hover:text-indigo-900 center"
                                                     style="display: inline" type="button"
-                                                    @click="read(documents.id)">
+                                                    @click="read(document.id)">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#2563EB" stroke="#fff" stroke-width="2" 
                                                     stroke-linecap="round" stroke-linejoin="round"><path fill="#2563EB" d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle fill="#2563EB" cx="12" cy="12" r="3"></circle></svg>
                                                 </button>
@@ -315,14 +341,14 @@
                                                 <button v-if="list_selected.length === 0" :loading="sending"
                                                     class="outline-none text-indigo-600 hover:text-indigo-900"
                                                     style="display: inline" type="button"
-                                                    @click="showShareRequest(documents.id)">
+                                                    @click="showShareFormDocument(document.id)">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#2563EB" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle fill="#2563EB" cx="18" cy="5" r="3"></circle><circle fill="#2563EB" cx="6" cy="12" r="3"></circle><circle fill="#2563EB" cx="18" cy="19" r="3"></circle><line fill="#2563EB" x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line fill="#2563EB" x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
                                                 </button>
                                             </td>
 
                                             
                                         </tr>
-                                        <tr v-if="document.length === 0">
+                                        <tr v-if="documents.length === 0">
                                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium"
                                                 colspan="14">Pas de document.</td>
                                         </tr>
@@ -380,15 +406,29 @@ export default {
     },
     layout: AppLayout,
     props: {
-        document: Object
+        documents: Object,
+        persons: Object,
+        groupes: Object
     },
     data() {
         return {
+            selected: 'user',
+            document: '',
+            document_id: null,
+            group_id:null,
+            user_to_share_document: null,
+            person_id: null,
             form: {
                 },
-            share_form:{
+            
+            user_form: {
+                username: null,
+                document: null,
+                },
 
-            },
+            group_form: {
+                group_id: null
+                },
             message: null,
             title: null,
             show: {
@@ -409,6 +449,7 @@ export default {
         destroy(id) {
             this.showModal = true
             this.show.default = true
+            this.itemDeleteId = id
             this.title = 'Confirmation de suppression'
             this.message = 'Êtes-vous sûr de vouloir supprimer ce document?'
         },
@@ -417,135 +458,41 @@ export default {
             this.fullScreenModalIsOpen = false
         },
 
-        showShareRequest(id){
+        showShareFormDocument(id){
             this.fullScreenModalIsOpen = true
-            this.id = id
-    },
+            this.document_id = id
+        },
+        
+        submit() {
+            // console.log(this.document_id);
+            let form = {
+                document_id: this.document_id,
+                user_id: this.user_to_share_document?.id,
+                group_id: this.group_to_share_document?.id
+            }
+            
+            this.$inertia.post(this.route('documents.share'), form, {
+                onStart: () => this.sending = true,
+                onFinish: () => this.sending = false  
+            })
+            
+        },        
 
         read(id) {
-
+            
         },
 
         download(id) {
             
         },
 
-        confirm() {
-            if (this.itemDeleteId) {
+        confirm(id) {
+                this.id = id
                 this.showModal = false
                 this.$inertia.delete(this.route('documents.destroy', this.itemDeleteId));
-            } else {
-                if (this.sms_participant_id) {
-                    this.showModal = false
-                    let form = {
-                        participant_id: this.sms_participant_id
-                    }
-                    // this.$inertia.post(this.route('participants.send.sms'), form, {
-                    //     onStart: () => this.sending = true,
-                    //     onFinish: () => this.sending = false,
-                    // })
-                } else {
-                    if (this.mail_participant_id) {
-                        this.showModal = false
-                        let form = {
-                            participant_id: this.mail_participant_id
-                        }
-                        // this.$inertia.post(this.route('participants.send.mail'), form, {
-                        //     onStart: () => this.sending = true,
-                        //     onFinish: () => this.sending = false,
-                        // })
-                    } else {
-                        if (this.many_sms) {
-                            let form = {
-                                participant_list: this.list_selected
-                            }
-
-                            // this.$inertia.post(this.route('participants.send.sms.selected.participants'), form, {
-                            //     onStart: () => this.sending = true,
-                            //     onFinish: () => this.sending = false,
-                            // })
-                            this.list_selected = []
-                            this.showModal = false
-                            //console.log('sms')
-                        } else {
-                            if (this.many_mail) {
-                                let form = {
-                                    participant_list: this.list_selected
-                                }
-                                // this.$inertia.post(this.route('participants.send.mail.selected.participants'), form, {
-                                //     onStart: () => this.sending = true,
-                                //     onFinish: () => this.sending = false,
-                                // })
-                                this.showModal = false
-                                this.list_selected = []
-                            } else {
-                                if (this.participant) {
-                                    let form = {
-                                        participant_id: this.participant.id
-                                    }
-                                    // this.$inertia.post(this.route('participants.send.ticket'), form, {
-                                    //     onStart: () => this.sending = true,
-                                    //     onFinish: () => this.sending = false,
-                                    // })
-                                    this.showModal = false
-                                } else {
-                                    if (this.many_ticket) {
-                                        let form = {
-                                            participant_list: this.list_selected
-                                        }
-                                        // this.$inertia.post(this.route('participants.send.tickets'), form, {
-                                        //     onStart: () => this.sending = true,
-                                        //     onFinish: () => this.sending = false,
-                                        // })
-                                        this.showModal = false
-                                        this.list_selected = []
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
+            
         },
-        cancel() {
-            this.showModal = false
-            this.itemDeleteId = null
-            this.sms_participant_id = null
-            this.mail_participant_id = null
-            this.many_sms = false
-            this.many_mail = false
-            this.many_ticket = false
-            this.participant = null
-        },
-        sendMail(id) {
-            this.showModal = true
-            this.show.default = true
-            this.itemDeleteId = null
-            this.sms_participant_id = null
-            this.mail_participant_id = id
-            this.many_sms = false
-            this.many_mail = false
-            this.many_ticket = false
-            this.participant = null
-            this.title = 'Confirmation d\'envoi de mail'
-            this.message = 'Voulez-vous ré-envoyer l’invitation par e-mails ?'
 
-        },
-        sendSms(id) {
-            this.showModal = true
-            this.show.default = true
-            this.itemDeleteId = null
-            this.sms_participant_id = id
-            this.mail_participant_id = null
-            this.many_sms = false
-            this.many_mail = false
-            this.many_ticket = false
-            this.title = 'Confirmation d\'envoi de sms'
-            this.message = 'Voulez-vous ré-envoyer l’invitation par SMS ?'
-            this.participant = null
-
-        },
         selectParticipant(participant) {
             if (this.list_selected.length === 0) {
                 this.list_selected.push(participant)
@@ -613,14 +560,8 @@ export default {
     },
 
     watch: {
-        form: {
-            handler: throttle(function () {
-                let query = pickBy(this.form)
-                this.$inertia.get(this.route('participants.index', Object.keys(query).length ? query : { remember: 'forget' }), {}, { preserveState: true })
-            }, 150),
-            deep: true,
+
         },
-    },
 
     mounted() {
         if (this.form.event === null) {

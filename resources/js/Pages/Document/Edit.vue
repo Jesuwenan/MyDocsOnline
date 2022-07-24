@@ -43,7 +43,14 @@
 
                         <div class="col-span-3 sm:col-span-3">
                             <label class="block text-sm font-medium text-gray-700" for="Categorie">Categorie *:</label>
-                            <input v-model="form.categorie" ref="Categorie" name="Categorie" id="Categorie" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
+                            <VueMultiselect
+                                class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                v-model="form.category" 
+                                :multiple="false" 
+                                open-direction="bottom"
+                                :option-height="100"
+                                :options="categories">
+                            </VueMultiselect>
                             <div v-if="errors.categorie" class="text-red-700 mt-2 text-sm">{{ errors.categorie }}</div>
                         </div>
                         
@@ -100,12 +107,13 @@
                             @addfile="addFile"/>
                         </div>
                     </div>
-                   
+                    
                 </div>
                 <div class="px-8 py-4 bg-gray-100 border-t border-gray-200 flex justify-end items-center">
                     <loading-button :loading="sending" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">Enregistrer</loading-button>
                 </div>
             </form>
+            
         </div>
 
 
@@ -134,6 +142,7 @@ export default {
     },
     props: {
         document: Object,
+        categories: Object,
         errors: Object
     },
     layout: AppLayout,
@@ -143,7 +152,7 @@ export default {
             form: {
                 titre: this.document.titre,
                 auteur: this.document.auteur,
-                category: this.document.category,
+                category: this.document.categorie.nom,
                 slug: this.document.slug,
                 date: this.document.date,
                 password: this.document.password,
@@ -162,7 +171,7 @@ export default {
     methods: {
         submit() {
             
-            this.$inertia.put(this.route('document.update',this.document.id), this.form, {
+            this.$inertia.put(this.route('documents.update',this.document.id), this.form, {
                 onStart: () => this.sending = true,
                 onFinish: () => this.sending = false,
                 

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Document;
 
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Str;
+use App\Models\Document\Category;
 use App\Models\Document\Document;
 use App\Http\Controllers\Controller;
-use App\Models\Document\Category;
-use App\Models\Document\Document_has_user;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use App\Models\Document\Document_has_user;
+use App\Models\Document\Groupe;
+use App\Models\People\Person;
 
 class DocumentController extends Controller
 {
@@ -24,12 +27,14 @@ class DocumentController extends Controller
     public function index()
     {
         
-        $document = Document::where('user_id', Auth::user()->id)->get();
-
-        // dd($document);
+        $document = Document::where('user_id', Auth::user()->id)->with('categorie')->get();
+        $person = Person::get();
+        $group = Groupe::get();
         return Inertia::render('Document/Index',[
 
-            'document' => $document
+            'documents' => $document,
+            'persons' => $person,
+            'groupes' => $group
         ]
         );
     }
@@ -41,11 +46,11 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        $category = Category::all();
-
+        $category = Category::get('nom')->pluck('nom');
+        // dd($category);
         return Inertia::render('Document/Create',[
 
-            'category' => $category
+            'categories' => $category
         ]);
     }
 
@@ -104,6 +109,41 @@ class DocumentController extends Controller
         
     }
 
+    public function download(Request $request){
+        $validator = Request::validate([
+            'document_id' => ['required','integer']
+        ]);
+
+        $document = Document::where('id',Request::get('document_id'))->first()->get();
+
+        $file = $document->path;
+
+        $headers = array(
+            'Content-Type: Application/pdf',
+        );
+
+        return Response::download($file, $document->titre, $headers);
+
+        
+    }
+
+    public function read(Request $request){
+        $validator = Request::validate([
+            'document_id' => ['required','integer']
+        ]);
+
+        $document = Document::where('id',Request::get('document_id'))->first()->get();
+
+        $file = $document->path;
+
+        $headers = array(
+            'Content-Type: Application/pdf',
+        );
+
+        return Response()->file($file,$headers);
+        
+    }
+
     /**
      * Display the specified resource.
      *
@@ -118,11 +158,11 @@ class DocumentController extends Controller
     public function view_shared_docs(Request $request){
 
         $documents = Document::where('user_id',Auth::user()->id)->pluck('id')->toArray();
-
-        $documents_shared = Document_has_user::whereIn('document_id', $documents)->with(Document::class)->get();
-
+        
+        $documents = Document_has_user::whereIn('document_id', $documents)->with('document')->first();
+        // dd($documents);
         return Inertia::render('Document/Document_shared', [
-            'document_shared' => $documents_shared
+            'documents' => $documents,
         ]);
     }
 
@@ -130,20 +170,51 @@ class DocumentController extends Controller
         
         $validator = Request::validate([
 
-            'username' => ['required','string'],
-            'document_id' => ['required','integer']
-        
+            'user_id' => ["required_without:group_id","integer"],
+            'group_id' => ["required_without:user_id","integer"],
+            'document_id' => ["required","integer"],
         ]);
-
-        Document_has_user::create([
-
-            'user_id' => User::where('username',Request::get('username'))->first()->id,
-            'document_id' => Request::get('document_id')
         
-        ])->save();
+        if(Request::get('user_id') != null OR Request::get('user_id') != ''){
+            Document_has_user::create([
+                'user_id' => Person::where('id',Request::get('user_id'))->first()->id,
+                'document_id' => Request::get('document_id')
+            ])->save();
         
-        return Redirect::route('documents.index')->with('success', 'document partagé avec succès.');
+            return Redirect::route('documents.index')->with('success', 'document partagé avec succès.');
+        }
+        if(Request::get('group_id') != null OR Request::get('group_id') != ''){
+            $group_members = Groupe::where('id', Request::get('group_id'))->get();
 
+            foreach ($group_members as $group_member){
+
+                Document_has_user::create([
+                    'user_id' => Person::where('id',Request::get('user_id'))->first()->id,
+                    'document_id' => Request::get('document_id')
+                ])->save();
+            }
+                return Redirect::route('documents.index')->with('success', 'document partagé avec succès.');
+            }
+    }
+
+    public function group_share(Request $request){
+        
+        $validator = Request::validate([
+
+            'username' => ['required','string'],
+            'group_id' => ['required','integer']
+        ]);
+        
+        $group_members = Groupe::where('id', Request::get('group_id'))->get();
+
+        foreach ($group_members as $group_member){
+
+            Document_has_user::create([
+                'user_id' => User::where('username',$group_member->user_id)->first()->id,
+                'document_id' => Request::get('document_id')
+            ])->save();
+        }
+            return Redirect::route('documents.index')->with('success', 'document partagé avec succès.');
     }
 
     /**
@@ -154,11 +225,11 @@ class DocumentController extends Controller
      */
     public function edit($id)
     {
-        $document = Document::where('id',$id)->first();
+        $categories = Category::all()->pluck('nom');
+        $document = Document::where('id',$id)->with('categorie')->first();
         return Inertia::render('Document/Edit', [
-
             'document' => $document,
-
+            'categories' => $categories
         ]);
     }
 

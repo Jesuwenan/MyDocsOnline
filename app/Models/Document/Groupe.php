@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Document;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Document_has_user extends Model
+class Groupe extends Model
 {
     use HasFactory;
 
-    protected $guarded = []; 
+    protected $guarded = [];
 }

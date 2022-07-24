@@ -12,7 +12,7 @@ class Document extends Model
 
     public function categorie(){
 
-        return $this -> belongsTo('category');
+        return $this -> belongsTo(Category::class,'category_id');
     
     }
 }
