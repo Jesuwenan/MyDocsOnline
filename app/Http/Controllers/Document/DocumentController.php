@@ -105,8 +105,7 @@ class DocumentController extends Controller
 
         
 
-        return Redirect::route('documents.index')->with('success', 'document créé avec succès.');
-        
+        return Redirect::route('documents.index')->with('success', 'document créé avec succès.');        
     }
 
     public function download(Request $request){
@@ -184,12 +183,13 @@ class DocumentController extends Controller
             return Redirect::route('documents.index')->with('success', 'document partagé avec succès.');
         }
         if(Request::get('group_id') != null OR Request::get('group_id') != ''){
-            $group_members = Groupe::where('id', Request::get('group_id'))->get();
+            $group_members = Groupe::where('id', Request::get('group_id'))->get()->pluck('user_id');
 
+            // dd($group_members);
             foreach ($group_members as $group_member){
 
                 Document_has_user::create([
-                    'user_id' => Person::where('id',Request::get('user_id'))->first()->id,
+                    'user_id' => Person::where('id',$group_member)->first()->id,
                     'document_id' => Request::get('document_id')
                 ])->save();
             }
@@ -200,7 +200,6 @@ class DocumentController extends Controller
     public function group_share(Request $request){
         
         $validator = Request::validate([
-
             'username' => ['required','string'],
             'group_id' => ['required','integer']
         ]);

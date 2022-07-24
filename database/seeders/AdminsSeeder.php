@@ -25,7 +25,7 @@ class AdminsSeeder extends Seeder
             'email' => 'admin@admin.com',
             'vat_number'    => 'BERRR343432'
         ]);
-       
+    
         $data = [
 
             [
