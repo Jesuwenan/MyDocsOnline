@@ -23,10 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionsSeeder::class,
             AdminsSeeder::class,
-            EventSeeder::class,
-            CompanySeeder::class,
-            OrderSeeder::class,
-            EventDroitSeeder::class
         ]);
     }
 }
