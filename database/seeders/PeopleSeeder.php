@@ -58,7 +58,7 @@ class PeopleSeeder extends Seeder
                 'username' => 'Egbavou',
                 'sexe' => 'Masculin',
                 'email' => 'egbavou@gmail.com',
-                'phone' => 91137631
+                'phone' => 91137635
             ],
             [
                 'first_name' => 'Judith',
