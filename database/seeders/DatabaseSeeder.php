@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionsSeeder::class,
             AdminsSeeder::class,
+<<<<<<< HEAD
             CategorySeeder::class,
             DocumentSeeder::class,
             GroupSeeder::class,
@@ -32,6 +33,8 @@ class DatabaseSeeder extends Seeder
             // CompanySeeder::class,
             // OrderSeeder::class,
             // EventDroitSeeder::class
+=======
+>>>>>>> 9e02e8431eb65b27c4c3346bf8f50f2dec0caef7
         ]);
     }
 }

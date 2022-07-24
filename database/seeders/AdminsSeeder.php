@@ -17,6 +17,7 @@ class AdminsSeeder extends Seeder
      */
     public function run()
     {
+<<<<<<< HEAD
         $company = Company::create([
             'name' => 'Charnoy',
             'address' => 'Admin',
@@ -26,14 +27,16 @@ class AdminsSeeder extends Seeder
             'vat_number'    => 'BERRR343432'
         ]);
     
+=======
+        
+>>>>>>> 9e02e8431eb65b27c4c3346bf8f50f2dec0caef7
         $data = [
 
             [
                 'email' => 'admin@facilesolution.com',
                 // 'password' => Hash::make('tXcb_r6[uxXj_9~5'), 
                 'password' => Hash::make('azertyui'),
-                'is_admin'    => true,
-                'company_id' => $company->id
+                'is_admin'    => true
             ],
         ];
         
