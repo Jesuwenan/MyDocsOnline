@@ -6,7 +6,7 @@
           
          <div class="flex">
             <h3 class="text-3xl font-extrabold text-gray-900">
-                Personnes
+                Utilisateur
             </h3>
             <div class="mt-3 sm:mt-0 sm:ml-4">
             
@@ -52,32 +52,28 @@
                     <tr>
                         
                         <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Actions</span>
+                          <span class="sr-only">Actions</span>
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Nom
+                          Nom
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Prénom
+                          Prénom
                         </th>
-                       
+                      
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                           Registre National
+                          Sexe
                         </th>
+
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Adresse
+                          Nom d'utilisateur
                         </th>
+                    
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Code postal
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Ville
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Email 
+                          Email 
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Phone
+                          Phone
                         </th>
                        
                     </tr>
@@ -105,17 +101,10 @@
                         {{person.first_name}}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{person.national_registry}}
+                        {{person.sexe}}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{person.address}}
-                      </td>
-                      
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ person.postal_code}}
-                      </td>
-                      <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ person.city}}
+                        {{person.username}}
                       </td>
                       <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {{ person.email}}

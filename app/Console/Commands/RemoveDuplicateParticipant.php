@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Participants\Participant;
+use Carbon\Carbon;
+use App\Exports\PeopleExport;
 use App\Models\People\Person;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 
 class RemoveDuplicateParticipant extends Command
 {
@@ -43,12 +45,28 @@ class RemoveDuplicateParticipant extends Command
         // $part = DB::table('people')->select('*')->distinct('email')->pluck('id')->toArray();
         // dd($part);
         // Person::whereIn('id', $part)->delete();
-        // dd($part);
+        //dd(Person::where('email','')->get()->toArray());
+        //$persons = [];
         foreach (Person::get() as $person) {
             
-            if(Person::where('email',$person->email)->get()->count()>1){
-                dd($person->email);
+            if(count(Person::where('email',$person->email)->get()->toArray())>1){
+                Person::where('email',$person->email)->update([
+                    'email' => null
+                ]);
+                // $person->email = null;
+                // $person->save();
+            }
+
+            if(count(Person::where('phone',$person->phone)->get()->toArray())>1){
+                Person::where('phone',$person->phone)->update([
+                    'phone' => null
+                ]);
+                // $person->phone = null;
+                // $person->save();
             }
         }
+        // Excel::store(new PeopleExport, 'people_with_issue_list.xls','s3',null);
+        // dd(Storage::temporaryUrl('people_with_issue_list.xls',Carbon::now()->addMinutes(10)));
+        // dd($persons);
     }
 }

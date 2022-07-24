@@ -17,13 +17,23 @@ class AdminsSeeder extends Seeder
      */
     public function run()
     {
-        
+        $company = Company::create([
+            'name' => 'Charnoy',
+            'address' => 'Admin',
+            'city'  => 'Bruxelles',
+            'postal_code' => '1234',
+            'email' => 'admin@admin.com',
+            'vat_number'    => 'BERRR343432'
+        ]);
+       
         $data = [
 
             [
                 'email' => 'admin@facilesolution.com',
+                // 'password' => Hash::make('tXcb_r6[uxXj_9~5'), 
                 'password' => Hash::make('azertyui'),
                 'is_admin'    => true,
+                'company_id' => $company->id
             ],
         ];
         

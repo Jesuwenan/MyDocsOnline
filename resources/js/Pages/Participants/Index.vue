@@ -319,17 +319,7 @@
               <div class="w-1/4 mr-3">
                 <div class="pb-4">
                   <div class="mt-1 relative rounded-md z-10">
-                    
-                    <VueMultiselect
-                      class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                      v-model="form.pagination"
-                      :multiple="false"
-                      placeholder="Nombre de ligne par page"
-                      open-direction="bottom"
-                      :option-height="200"
-                      :options="[10,25,50,100]">
-                    </VueMultiselect>
-
+                    <input type="checkbox" name="masculin" value="masculin" id="">
                   </div>
                 </div>
               </div>

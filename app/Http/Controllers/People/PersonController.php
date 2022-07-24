@@ -7,12 +7,15 @@ use Inertia\Inertia;
 use App\Rules\PhoneNumber;
 use App\Exports\PeopleExport;
 use App\Models\People\Person;
+use Ixudra\Curl\Facades\Curl;
 use App\Rules\NationalRegistry;
 use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
+use App\Mail\UserMail;
 
 class PersonController extends Controller
 {
@@ -23,9 +26,12 @@ class PersonController extends Controller
      */
     public function index()
     {
-        return Inertia::render('People/Index',[
+        Excel::store(new PeopleExport, 'people-list.xls', 's3', null);
+        return Inertia::render('People/Index', [
             'filters' => Request::all('search'),
             'people'  => Person::filter(Request::only('search'))->paginate(50),
+            'file'  =>   Person::peopleListUrl(),
+
         ]);
     }
 
@@ -37,7 +43,9 @@ class PersonController extends Controller
     public function create()
     {
         //
-        return Inertia::render('People/Create',[]);
+        return Inertia::render('People/Create', [
+            'sexe' => ['Masculin', 'Féminin']
+        ]);
     }
 
     /**
@@ -50,29 +58,26 @@ class PersonController extends Controller
     {
         //
         Request::validate([
-            'first_name' => ['required','string','max:255'],
-            'last_name' => ['required','string','max:255'],
-            'national_registry' => ['nullable','string','max:15',new NationalRegistry],
-            'address' => ['nullable','string','max:255'],
-            'postal_code' => ['nullable','string','max:255'],
-            'city' => ['nullable','string','max:255'],
-            'email' => ['required_without:phone','nullable','string','max:255',Rule::unique('people'),new  Email],
-            'country_code' => ['required_without:email','nullable'],
-            'phone' => ['required_without:email','nullable',
-                'max:255',Rule::unique('people'),
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'sexe' => ['string', 'max:255'],
+            'username' => ['string', 'max:255'],
+            'email' => ['required_without:phone', 'nullable', 'string', 'max:255', Rule::unique('people'), new  Email],
+            'country_code' => ['required_without:email', 'nullable'],
+            'phone' => [
+                'required_without:email', 'nullable',
+                'max:255', Rule::unique('people'),
                 new PhoneNumber(Request::get('country_code'))
             ],
-
         ]);
 
         $person = Person::create(
             Request::only(
                 'first_name',
                 'last_name',
-                'national_registry',
-                'address',
-                'postal_code',
-                'city',
+                'username',
+                'sexe',
+                'pseudo',
                 'email',
             )
         );
@@ -81,8 +86,16 @@ class PersonController extends Controller
             'phone' => Request::get('number')
         ]);
 
-        return Redirect::route('people.index')->with('success', 'Personne créé avec succès.');
+        // $token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMjA0OCIsImlhdCI6MTYyNTIxOTc2M30.Xa1mIztZT8o5cpEkFn8I0_VPRzOX4hk_irLSGLBDl0s";
+        // $message = "Vous avez un compte au sein de l'application All Docs Online avec le nom d'utilisateur " . $person->username;
+        
+        
+        // $participant_invitation = new userMail($person);
 
+        // if (Request::get('email'))
+        //     Mail::to(Request::get('email'))->send($participant_invitation);
+
+        return Redirect::route('people.index')->with('success', 'Personne créé avec succès.');
     }
 
     /**
@@ -105,7 +118,7 @@ class PersonController extends Controller
     public function edit(Person $person)
     {
         //
-        return Inertia::render('People/Edit',[
+        return Inertia::render('People/Edit', [
             'person'    => $person
         ]);
     }
@@ -117,21 +130,22 @@ class PersonController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,Person $person)
+    public function update(Request $request, Person $person)
     {
         //
         //dd(Request::get('number'));
         Request::validate([
-            'first_name' => ['required','string','max:255'],
-            'last_name' => ['required','string','max:255'],
-            'national_registry' => ['nullable','string','max:15',new NationalRegistry],
-            'address' => ['nullable','string','max:255'],
-            'postal_code' => ['nullable','string','max:255'],
-            'city' => ['nullable','string','max:255'],
-            'email' => ['required_without:phone','nullable','string','max:255',Rule::unique('people')->ignore($person->id),new  Email],
-            'country_code' => ['required_without:email','nullable'],
-            'phone' => ['required_without:email','nullable',
-                'max:255',Rule::unique('people')->ignore($person->id),
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'national_registry' => ['nullable', 'string', 'max:15', new NationalRegistry],
+            'address' => ['nullable', 'string', 'max:255'],
+            'postal_code' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+            'email' => ['required_without:phone', 'nullable', 'string', 'max:255', Rule::unique('people')->ignore($person->id), new  Email],
+            'country_code' => ['required_without:email', 'nullable'],
+            'phone' => [
+                'required_without:email', 'nullable',
+                'max:255', Rule::unique('people')->ignore($person->id),
                 new PhoneNumber(Request::get('country_code'))
             ],
         ]);
@@ -153,7 +167,6 @@ class PersonController extends Controller
         ]);
 
         return Redirect::route('people.index')->with('success', 'Personne modifié avec succès.');
-
     }
 
     /**
@@ -168,6 +181,5 @@ class PersonController extends Controller
         $person->delete();
 
         return Redirect::route('people.index')->with('success', 'Personne supprimée avec succès.');
-
     }
 }

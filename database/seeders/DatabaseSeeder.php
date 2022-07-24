@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Database\Seeders\EventSeeder;
+use Database\Seeders\OrderSeeder;
 use Database\Seeders\AdminsSeeder;
 use Database\Seeders\PeopleSeeder;
 use Database\Seeders\CompanySeeder;
+use Database\Seeders\EventDroitSeeder;
 use Database\Seeders\PermissionsSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -21,6 +23,10 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PermissionsSeeder::class,
             AdminsSeeder::class,
+            EventSeeder::class,
+            CompanySeeder::class,
+            OrderSeeder::class,
+            EventDroitSeeder::class
         ]);
     }
 }

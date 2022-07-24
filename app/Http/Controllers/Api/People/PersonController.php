@@ -12,12 +12,19 @@ class PersonController extends Controller
     public function searchPerson(Request $request)
     {
         Request::validate([
-            'email' => ['required','exists:people,email'],
+            'email' => ['required_without:phone','exists:people,email'],
+            'phone' => ['required_without:email','exists:people,phone']
         ]);
 
-        $person = Person::where([
-            'email'    =>  Request::get('email'),
-        ])->first();
+        if(Request::get('phone')) {
+            $person = Person::where([
+                'phone'    =>  Request::get('phone'),
+            ])->first();
+        } else{
+            $person = Person::where([
+                'email'    =>  Request::get('email'),
+            ])->first();
+        }
 
         if($person){
             return response()->json([

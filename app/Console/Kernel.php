@@ -34,10 +34,10 @@ class Kernel extends ConsoleKernel
             ->timezone('Europe/Brussels')
             ->at('01:32');
         
-        $schedule->command('send:invitation')
-            ->daily()
-            ->timezone('Europe/Brussels')
-            ->at('9:00');
+        // $schedule->command('send:invitation')
+        //     ->daily()
+        //     ->timezone('Europe/Brussels')
+        //     ->at('9:00');
     }
 
     /**

@@ -7,7 +7,7 @@
                 <ol class="flex items-center space-x-4">
                     <li>
                         <div class="flex items-center">
-                            <inertia-link class="text-3xl font-extrabold text-gray-900" :href="route('people.index')">Personnes</inertia-link>
+                            <inertia-link class="text-3xl font-extrabold text-gray-900" :href="route('people.index')">Utilisateur</inertia-link>
                         </div>
                     </li>
 
@@ -17,7 +17,7 @@
                             <svg class="flex-shrink-0 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                             </svg>
-                            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Créer une personne</a>
+                            <a href="#" class="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" aria-current="page">Créer un utilisateur</a>
                         </div>
                     </li>
                 </ol>
@@ -29,53 +29,43 @@
                 <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
 
-                        <div class="col-span-12 sm:col-span-6">
+                        <div class="col-span-3 sm:col-span-3">
                             <label class="block text-sm font-medium text-gray-700" for="last_name">Nom *:</label>
                             <input v-model="form.last_name" ref="last_name" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
                             <div v-if="errors.last_name" class="text-red-700 mt-2 text-sm">{{ errors.last_name }}</div>
                         </div>
 
-                        <div class="col-span-12 sm:col-span-6">
+                        <div class="col-span-3 sm:col-span-3">
                             <label class="block text-sm font-medium text-gray-700" for="first_name">Prénom *:</label>
                             <input v-model="form.first_name" name="first_name" id="first_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
                             <div v-if="errors.first_name" class="text-red-700 mt-2 text-sm">{{ errors.first_name }}</div>
                         </div>
 
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium text-gray-700" for="national_registry">Registre National (99.99.99-999.99):</label>
-                            <input @keydown="autoCompleteNationalRegistry" ref="national_registry" v-model="form.national_registry" name="national_registry" id="national_registry" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text" maxlength="15" autocomplete="off" />
-                            <div v-if="errors.national_registry" class="text-red-700 mt-2 text-sm">{{ errors.national_registry }}</div>
+                        <div class="col-span-3 sm:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700" for="username">Nom d'utilisateur *:</label>
+                            <input v-model="form.username" name="username" id="username" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
+                            <div v-if="errors.username" class="text-red-700 mt-2 text-sm">{{ errors.username }}</div>
                         </div>
-
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium text-gray-700" for="address">Adresse:</label>
-                            <input v-model="form.address" ref="address" name="address" id="address" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
-                            <div v-if="errors.address" class="text-red-700 mt-2 text-sm">{{ errors.address }}</div>
+                        <div class="col-span-3 sm:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700" for="email">Sexe *:</label>
+                            <select name="sexe" id="sexe" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" v-model = "form.sexe">
+                                <option value="Masculin">Masculin</option>
+                                <option value="Féminin">Féminin</option>
+                            </select>
                         </div>
-
-                        <div class="col-span-4 sm:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700" for="postal_code">Code postal:</label>
-                            <input v-model="form.postal_code" name="postal_code" id="postal_code" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
-                            <div v-if="errors.postal_code" class="text-red-700 mt-2 text-sm">{{ errors.postal_code }}</div>
-                        </div>
-
-                        <div class="col-span-8 sm:col-span-4">
-                            <label class="block text-sm font-medium text-gray-700" for="city">Ville:</label>
-                            <input v-model="form.city" name="city" id="city" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
-                            <div v-if="errors.city" class="text-red-700 mt-2 text-sm">{{ errors.city }}</div>
-                        </div>
-
-                        <div class="col-span-12 sm:col-span-6">
+                        <div class="col-span-3 sm:col-span-3">
                             <label class="block text-sm font-medium text-gray-700" for="email">Email *:</label>
                             <input v-model="form.email" name="email" id="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="email"  />
                             <div v-if="errors.email" class="text-red-700 mt-2 text-sm">{{ errors.email }}</div>
                         </div>
-
-                        <div class="col-span-12 sm:col-span-6">
-                            <label class="block text-sm font-medium text-gray-700" for="phone">Téléhone *:</label>
+                        <div class="col-span-3 sm:col-span-3">
+                            <label class="block text-sm font-medium text-gray-700" for="phone">Téléphone *:</label>
                             <vue-tel-input :value="phone" @input="onInput" mode="international" :inputOptions="inputOptions" defaultCountry="BE" :enabledCountryCode="true" :validCharactersOnly="true" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"></vue-tel-input>
                             <div v-if="errors.phone" class="text-red-700 mt-2 text-sm">{{ errors.phone }}</div>
                         </div>
+                        
+                        
+                        
 
                     </div>
                    
@@ -96,6 +86,8 @@ import AppLayout from '@/Layouts/AppLayout'
 import TextInput from '@/Shared/TextInput'
 import LoadingButton from '@/Shared/LoadingButton'
 import SelectInput from '@/Shared/SelectInput'
+import JetCheckbox from '@/Jetstream/Checkbox'
+import VueMultiselect from 'vue-multiselect'
 import { VueTelInput } from 'vue3-tel-input'
 import 'vue3-tel-input/dist/vue3-tel-input.css'
 
@@ -105,10 +97,14 @@ export default {
         LoadingButton,
         TextInput,
         SelectInput,
-        VueTelInput
+        VueTelInput,
+        JetCheckbox,
+        VueMultiselect,
+        
     },
     props: {
         errors: Object,
+        sexe: Array,
     },
     layout: AppLayout,
     data() {

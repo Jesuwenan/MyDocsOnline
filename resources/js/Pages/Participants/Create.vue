@@ -38,7 +38,7 @@
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium text-gray-700" for="bank_account_number">Titre *:</label>
                             <input @blur="searchPerson()" v-model="form.email" name="email" id="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="email"  />
-                            <!-- <VueMultiselect
+                            <VueMultiselect
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                                 v-model="form.company"
                                 @select="companySelection"
@@ -47,7 +47,7 @@
                                 track-by="id"
                                 label="name"
                                 :options="companies">
-                            </VueMultiselect> -->
+                            </VueMultiselect>
                             <div v-if="errors.company_id" class="text-red-700 mt-2 text-sm">{{ errors.company_id }}</div>
                         </div>
 
@@ -80,11 +80,11 @@
                             <div v-if="errors.email" class="text-red-700 mt-2 text-sm">{{ errors.email }}</div>
                         </div>
 
-                        <!-- <div class="col-span-12 sm:col-span-6">
+                        <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium text-gray-700" for="last_name">Catégorie *:</label>
                             <input  v-model="form.last_name" name="last_name" id="last_name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
                             <div v-if="errors.last_name" class="text-red-700 mt-2 text-sm">{{ errors.last_name }}</div>
-                        </div> -->
+                        </div>
 
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium text-gray-700" for="first_name">Description *:</label>
@@ -92,7 +92,7 @@
                             <div v-if="errors.first_name" class="text-red-700 mt-2 text-sm">{{ errors.first_name }}</div>
                         </div>
 
-                        <!-- <div class="col-span-12 sm:col-span-6">
+                        <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium text-gray-700" for="national_registry">Registre National (99.99.99-999.99):</label>
                             <input @keydown="autoCompleteNationalRegistry" ref="national_registry" v-model="form.national_registry" name="national_registry" id="national_registry" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text" maxlength="15" autocomplete="off" />
                             <div v-if="errors.national_registry" class="text-red-700 mt-2 text-sm">{{ errors.national_registry }}</div>
@@ -127,7 +127,7 @@
                                 :options="event_droits">
                             </VueMultiselect>
                             <div v-if="errors.event_droit" class="text-red-700 mt-2 text-sm">{{ errors.event_droit }}</div>
-                        </div> -->
+                        </div>
 
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium text-gray-700" for="bank_account_number">Droit:</label>

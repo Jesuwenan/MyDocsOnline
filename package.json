@@ -7,6 +7,9 @@
     "watch-poll": "mix watch -- --watch-options-poll=1000",
     "hot": "mix watch --hot",
     "prod": "npm run production",
+    "serve": "ncp node_modules/dwt/dist public/dwt-resources && vue-cli-service serve",
+    "build": "vue-cli-service build&& ncp node_modules/dwt/dist build/dwt-resources",
+    "lint": "vue-cli-service lint",
     "production": "mix --production"
   },
   "devDependencies": {
@@ -28,11 +31,17 @@
   "dependencies": {
     "@ckpack/vue-color": "^0.0.3",
     "@meforma/vue-toaster": "^1.2.2",
+    "@vueup/vue-quill": "^1.0.0-alpha.1",
+    "dwt": "^17.3.0",
     "filepond": "^4.27.2",
+    "filepond-plugin-file-validate-size": "^2.2.7",
     "filepond-plugin-file-validate-type": "^1.2.6",
     "filepond-plugin-get-file": "^1.0.6",
     "filepond-plugin-image-pdf-overlay": "^1.0.0",
     "filepond-plugin-image-preview": "^4.6.6",
+    "filepond-plugin-pdf-preview": "^1.0.4",
+    "ncp": "^2.0.0",
+    "scanner.js": "^2.10.3",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
     "vue-click-outside": "^1.1.0",
