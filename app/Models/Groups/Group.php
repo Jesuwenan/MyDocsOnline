@@ -14,6 +14,6 @@ class Group extends Model
 
     public function group_has_users()
     {
-        return $this->hasMany(GroupHasUser::class);
+        return $this->hasMany(GroupHasUser::class)->with('user');
     }
 }

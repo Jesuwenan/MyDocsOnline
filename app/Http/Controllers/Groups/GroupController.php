@@ -47,7 +47,7 @@ class GroupController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Request::validate([
+        Request::validate([
             'name' => ['required', 'string', 'max:225'],
             'users' => ['required', 'array'],
             'users.*.user.id' => ['required', 'exists:users,id']
@@ -88,8 +88,10 @@ class GroupController extends Controller
      */
     public function edit(Group $group)
     {
+        //dd(Group::where('id', $group->id)->with('group_has_users')->first());
         return Inertia::render('Groups/Edit', [
             'group' => Group::where('id', $group->id)->with('group_has_users')->first(),
+            'users' => User::get()
         ]);
     }
 
@@ -100,9 +102,31 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Group $group)
     {
-        //
+        Request::validate([
+            'name' => ['required', 'string', 'max:225'],
+            'users' => ['required', 'array'],
+            'users.*.user.id' => ['required', 'exists:users,id']
+        ]);
+        
+        $group->update([
+            'owner_id' => Auth::user()->id,
+            'name' => Request::get('name')
+        ]);
+
+        GroupHasUser::where([
+            'group_id' => $group->id,
+        ])->delete();
+
+        foreach (Request::get('users') as $user) {
+            GroupHasUser::create([
+                'group_id' => $group->id,
+                'user_id' => $user['user']['id']
+            ]);
+        }
+
+        return Redirect::route('groups.index')->with('success','Groupe modifié avec succèss.');
     }
 
     /**
@@ -111,8 +135,10 @@ class GroupController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Group $group)
     {
-        //
+        $group->delete();
+
+        return Redirect::route('groups.index')->with('success', 'Groupe supprimé avec succès.');
     }
 }

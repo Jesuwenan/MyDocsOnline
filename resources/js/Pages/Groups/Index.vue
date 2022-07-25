@@ -126,9 +126,9 @@
 
                                         </tr>
                                         <tr v-if="groups.data.length === 0">
-                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium"
-                                                colspan="10">Pas de
-                                                personnes.</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium" colspan="10">
+                                                Pas de groupes.
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -210,13 +210,13 @@ export default {
             this.show.default = true
             this.itemDeleteId = id
             this.title = 'Confirmation de suppression'
-            this.message = 'Êtes-vous sûr de vouloir supprimer ce document?'
+            this.message = 'Êtes-vous sûr de vouloir supprimer ce groupe?'
         },
 
         confirm(id) {
             this.id = id
             this.showModal = false
-            this.$inertia.delete(this.route('group.destroy', this.itemDeleteId));
+            this.$inertia.delete(this.route('groups.destroy', this.itemDeleteId));
 
         },
 

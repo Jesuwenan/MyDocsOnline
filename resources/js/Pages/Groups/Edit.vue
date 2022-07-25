@@ -61,7 +61,15 @@
                         <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
                         <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
                     </svg>
-                  <span class="self-center"> Membres </span>
+                    <span class="self-center"> Membres </span>
+                    <span v-for="i in ['users']" :key="i">
+                        <span v-if="errors.hasOwnProperty(i)">
+                        <span :set="err += 1"></span>
+                        </span>
+                    </span>
+                    <span v-if="err > 0" class="bg-red-500 text-white hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                        {{ err }}
+                    </span>
                 </a>
 
                 <a href="javascript:;" @click="chooseTab('files')" :class="currentTab == 'files' ? 'flex-1 border-indigo-500 text-indigo-600 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm' : 'flex-1 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm'">
@@ -81,7 +89,6 @@
             <form @submit.prevent="submit">
                 <div class="px-4 py-5 bg-white sm:p-6">
                     <div class="grid grid-cols-6 gap-6">
-
                         <div class="col-span-12 sm:col-span-6">
                             <label class="block text-sm font-medium text-gray-700" for="name">Nom du groupe *:</label>
                             <input v-model="form.name" name="name" id="name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" type="text"  />
@@ -105,7 +112,7 @@
                 <form @submit.prevent="submit">
                     <div class="px-4 py-5 bg-white sm:p-6" >
                         <div class="grid grid-cols-6 gap-6">
-                            <div class="col-span-6 sm:col-span-3">
+                            <div class="col-span-12 sm:col-span-6">
                                 <label class="block text-sm font-medium text-gray-700">Utilisateur</label>
                                 <Multiselect
                                     v-model="user.user"
@@ -145,7 +152,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Odd row -->
+                            
                             <tr v-for="(user, id) in form.users" :key="user.id" class="bg-white">
                                 
                                 <td class="px-6 py-4 whitespace-nowrap text-left text-sm font-medium">
@@ -178,7 +185,7 @@
             </div>
         </div>
 
-        <!--div class="bg-white rounded shadow overflow-hidden" v-show="currentTab==='files'">
+        <div class="bg-white rounded shadow overflow-hidden" v-show="currentTab==='files'">
             <form @submit.prevent="submit">
                 <div class="px-4 py-5 bg-white sm:p-6">
                   
@@ -203,7 +210,7 @@
                     <loading-button :loading="sending" class="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" type="submit">Enregistrer</loading-button>
                 </div>
             </form>
-        </div-->
+        </div>
 
         
         <confirmation-dialog 
@@ -258,7 +265,8 @@ export default {
     props: {
         errors: Object,
         group: Object,
-        files: Object
+        users: Array,
+        //files: Object
     },
     layout: AppLayout,
     data() {
@@ -295,26 +303,22 @@ export default {
 
         }
     },
-    mounted() {
-        
-        this.group.group_has_users.forEach(user => {
+    created() {
+        this.group.group_has_users.forEach(group_has_user => {
             let item = {
-                user: user
+                user: group_has_user.user
             }
             this.form.users.push(item)
         })
-    },
-    created() {
-        for (const file of this.files) {
-            this.filepondFiles.push(file.name);
-            this.myFiles.push({
-                source: file.name,
-                options: {
-                type: 'limbo',
-                },
-            });
-        }
-        console.log(this.activities)
+        // for (const file of this.files) {
+        //     this.filepondFiles.push(file.name);
+        //     this.myFiles.push({
+        //         source: file.name,
+        //         options: {
+        //         type: 'limbo',
+        //         },
+        //     });
+        // }
         //console.log(this.activities.changes.attributes.files)
     },
     methods: {
@@ -322,14 +326,11 @@ export default {
             this.currentTab = tag;
         },
         submit() {
-            console.log(this.form)
             for (const [key, value] of this.filepondFiles.entries()) {
                 this.form.filepond_server_ids.push(value);
             }
 
             this.form.filepond_server_ids = [...new Set(this.form.filepond_server_ids)];
-
-            this.form.sponsor_id = this.sponsor_id.id
 
             this.$inertia.post(this.route('groups.update', this.group.id), this.form, {
                 onStart: () => this.sending = true,
@@ -473,15 +474,15 @@ export default {
         }
     },
     mounted(){
-        this.setInputFilter(this.$refs.price, function(value) {
-            return /^-?\d*[.]?\d*$/.test(value); 
-        });
-        this.setInputFilter(this.$refs.price_recoding, function(value) {
-            return /^-?\d*[.]?\d*$/.test(value); 
-        });
-        this.setInputFilter(this.$refs.price_query, function(value) {
-            return /^-?\d*[.]?\d*$/.test(value); 
-        });
+        // this.setInputFilter(this.$refs.price, function(value) {
+        //     return /^-?\d*[.]?\d*$/.test(value); 
+        // });
+        // this.setInputFilter(this.$refs.price_recoding, function(value) {
+        //     return /^-?\d*[.]?\d*$/.test(value); 
+        // });
+        // this.setInputFilter(this.$refs.price_query, function(value) {
+        //     return /^-?\d*[.]?\d*$/.test(value); 
+        // });
     }
     
 }

@@ -63,7 +63,15 @@
                         <path fill-rule="evenodd" d="M5.216 14A2.238 2.238 0 0 1 5 13c0-1.355.68-2.75 1.936-3.72A6.325 6.325 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216z"/>
                         <path d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"/>
                     </svg>
-                  <span class="self-center"> Membres </span>
+                    <span class="self-center"> Membres </span>
+                    <span v-for="i in ['users']" :key="i">
+                        <span v-if="errors.hasOwnProperty(i)">
+                        <span :set="err += 1"></span>
+                        </span>
+                    </span>
+                    <span v-if="err > 0" class="bg-red-500 text-white hidden ml-3 py-0.5 px-2.5 rounded-full text-xs font-medium md:inline-block">
+                        {{ err }}
+                    </span>
                 </a>
 
                 <a href="javascript:;" @click="chooseTab('files')" :class="currentTab == 'files' ? 'flex-1 border-indigo-500 text-indigo-600 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm' : 'flex-1 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 group inline-flex items-center py-4 px-1 border-b-2 font-medium text-sm'">
