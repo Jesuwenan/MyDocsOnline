@@ -42,7 +42,7 @@ class GroupeController extends Controller
         $people = Person::all()->pluck('username');
         // dd($people);
         return Inertia::render('Groupe/Create',[
-            'person' => $people
+            'users' => $people
         ]);
 
     }

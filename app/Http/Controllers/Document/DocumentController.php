@@ -28,13 +28,13 @@ class DocumentController extends Controller
     {
         
         $document = Document::where('user_id', Auth::user()->id)->with('categorie')->get();
-        $person = Person::get();
-        $group = Groupe::get();
+        // $person = Person::get();
+        // $group = Groupe::get();
         return Inertia::render('Document/Index',[
 
             'documents' => $document,
-            'persons' => $person,
-            'groupes' => $group
+            // 'persons' => $person,
+            // 'groupes' => $group
         ]
         );
     }

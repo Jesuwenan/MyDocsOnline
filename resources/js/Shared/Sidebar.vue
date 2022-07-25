@@ -38,8 +38,8 @@
                             </inertia-link> -->
 
                         <inertia-link v-show="$page.props.user.is_admin"
-                            :class="isUrl('people') ? 'bg-gray-800 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium' : 'group flex items-center px-2 py-2 text-sm leading-6 font-medium text-white hover:text-white hover:bg-gray-700'"
-                            :href="route('people.index')">
+                            :class="isUrl('users') ? 'bg-gray-800 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium' : 'group flex items-center px-2 py-2 text-sm leading-6 font-medium text-white hover:text-white hover:bg-gray-700'"
+                            :href="route('users.index')">
                             <svg xmlns="http://www.w3.org/2000/svg" class="mr-4 h-6 w-6 text-white" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -79,7 +79,7 @@
 
                         <inertia-link
                             :class="isUrl('groups') ? 'bg-gray-800 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium' : 'group flex items-center px-2 py-2 text-sm leading-6 font-medium text-white hover:text-white hover:bg-gray-700'"
-                            :href="route('groupe.index')">
+                            :href="route('groups.index')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 class="mr-4 h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="#fff"
                                 stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
@@ -119,8 +119,8 @@
                             <div class="space-y-1 space-y-1 pt-5">
 
                                 <inertia-link v-show="$page.props.user.is_admin"
-                                    :class="isUrl('people') ? 'bg-gray-800 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium' : 'group flex items-center px-2 py-2 text-sm leading-6 font-medium text-white hover:text-white hover:bg-gray-700'"
-                                    :href="route('people.index')">
+                                    :class="isUrl('users') ? 'bg-gray-800 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium' : 'group flex items-center px-2 py-2 text-sm leading-6 font-medium text-white hover:text-white hover:bg-gray-700'"
+                                    :href="route('users.index')">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="mr-4 h-6 w-6 text-white" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor">
                                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -191,7 +191,7 @@
 
                                 <inertia-link
                                     :class="isUrl('groups') ? 'bg-gray-800 text-white group flex items-center px-2 py-2 text-sm leading-6 font-medium' : 'group flex items-center px-2 py-2 text-sm leading-6 font-medium text-white hover:text-white hover:bg-gray-700'"
-                                    :href="route('groupe.index')">
+                                    :href="route('groups.index')">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="mr-4 text-white h-6 w-6" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
                                         <path stroke-linecap="round" stroke-linejoin="round"

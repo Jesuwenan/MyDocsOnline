@@ -161,46 +161,7 @@
                                 </div>
                             </div>
 
-                            <div class="flex mb-4">
-                                <div class="bg-white p-6 mr-2 flex-1 border-b-2 border-gray-200 shadow">
-                                    <p class="text-center text-indigo-700">
-                                        <span class="">{{ document.length }}</span> <br>
-                                        <span>Nombre de documents</span>
-                                    </p>
-
-                                </div>
-                                <div class="bg-white p-6 mr-2 flex-1 border-b-2 border-gray-200 shadow">
-
-                                    <p class="text-center text-red-300">
-                                        <span class="">{{ total_refused }}</span> <br>
-                                        <span>Nombre de groupes</span>
-                                    </p>
-
-                                </div>
-                                <div class="bg-white p-6 mr-2 flex-1 border-b-2 border-gray-200 shadow">
-
-                                    <p class="text-center text-green-300">
-                                        <span class="">{{ total_confirmed }}</span> <br>
-                                        <span>Nombre d'invitations'</span>
-                                    </p>
-
-                                </div>
-                                <!-- <div class="bg-white p-6 mr-2 flex-1 border-b-2 border-gray-200 shadow">
-
-                <p class="text-center text-gray-500	">
-                    <span class="">{{total_not_confirmed}}</span> <br>
-                    <span>Nombre de sans-réponse</span>
-                </p>
-                
-                </div>
-                <div class="bg-white  p-6 flex-1 border-b-2 border-gray-200 shadow">
-                <p class="text-center text-green-500">
-                    <span class="">{{total_present}}</span> <br>
-                    <span>Nombre de présents</span>
-                </p>
-                
-                </div> -->
-                            </div>
+                            
                                 <!-- {{ documents}} -->
                             <div class="shadow border-b border-gray-200 sm:rounded-lg">
                                 <table class="min-w-full divide-y divide-gray-200 ">

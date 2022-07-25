@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use DateTime;
-use App\Models\Events\Event;
-use App\Models\People\Person;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\Companies\Company;
-use App\Models\Participants\Participant;
+use Illuminate\Support\Facades\Hash;
 
 class PeopleSeeder extends Seeder
 {
@@ -20,21 +18,23 @@ class PeopleSeeder extends Seeder
     {
         
         $data = [
-            [
-                'first_name' => 'Samuel',
-                'last_name' => 'ZANNOU',
-                'username' => 'Samfinder',
-                'sexe' => 'Masculin',
-                'email' => 'zsamuel737@gmail.com',
-                'phone' => 91137630
-            ],
+            // [
+            //     'first_name' => 'Samuel',
+            //     'last_name' => 'ZANNOU',
+            //     'username' => 'Samfinder',
+            //     'sexe' => 'Masculin',
+            //     'email' => 'zsamuel737@gmail.com',
+            //     'phone' => 91137630,
+            //     'password' => Hash::make('azertyui'),
+            // ],
             [
                 'first_name' => 'Joel',
                 'last_name' => 'ZANNOU',
                 'username' => 'Joel',
                 'sexe' => 'Masculin',
                 'email' => 'jc@gmail.com',
-                'phone' => 67928812
+                'phone' => 67928812,
+                'password' => Hash::make('azertyui'),
             ],
             [
                 'first_name' => 'Dara',
@@ -42,7 +42,8 @@ class PeopleSeeder extends Seeder
                 'username' => 'Dara',
                 'sexe' => 'Masculin',
                 'email' => 'dara@gmail.com',
-                'phone' => 91137631
+                'phone' => 91137631 ,
+                'password' => Hash::make('azertyui'),
             ],
             [
                 'first_name' => 'André',
@@ -50,7 +51,8 @@ class PeopleSeeder extends Seeder
                 'username' => 'André',
                 'sexe' => 'Masculin',
                 'email' => 'andre@gmail.com',
-                'phone' => 91137632
+                'phone' => 91137632,
+                'password' => Hash::make('azertyui'),
             ],
             [
                 'first_name' => 'Emmanuel',
@@ -58,15 +60,17 @@ class PeopleSeeder extends Seeder
                 'username' => 'Egbavou',
                 'sexe' => 'Masculin',
                 'email' => 'egbavou@gmail.com',
-                'phone' => 91137635
+                'phone' => 91137635,
+                'password' => Hash::make('azertyui'),
             ],
             [
                 'first_name' => 'Judith',
                 'last_name' => 'ZANNOU',
                 'username' => 'Judith',
-                'sexe' => 'feminin',
+                'sexe' => 'Feminin',
                 'email' => 'Judith@gmail.com',
-                'phone' => 96788113
+                'phone' => 96788113,
+                'password' => Hash::make('azertyui'),
             ],
             [
                 'first_name' => 'Toto',
@@ -74,12 +78,13 @@ class PeopleSeeder extends Seeder
                 'username' => 'KOTO',
                 'sexe' => 'Masculin',
                 'email' => 'koto@gmail.com',
-                'phone' => 96788100
+                'phone' => 96788100,
+                'password' => Hash::make('azertyui'),
             ]
             ];
         
             foreach($data as $row){
-                $people = Person::firstOrCreate($row);
+                User::firstOrCreate($row);
             };
           
     }
