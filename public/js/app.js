@@ -21173,12 +21173,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var filepond_plugin_pdf_preview__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(filepond_plugin_pdf_preview__WEBPACK_IMPORTED_MODULE_15__);
 /* harmony import */ var _vueup_vue_quill__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @vueup/vue-quill */ "./node_modules/@vueup/vue-quill/dist/vue-quill.es.js");
 /* harmony import */ var _vueup_vue_quill_dist_vue_quill_snow_css__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @vueup/vue-quill/dist/vue-quill.snow.css */ "./node_modules/@vueup/vue-quill/dist/vue-quill.snow.css");
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 
 
 
@@ -21225,7 +21219,8 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
       phone: null,
       selected: null,
       autocomplete: null,
-      currentTab: 'details'
+      currentTab: 'details',
+      files: []
     };
   },
   methods: {
@@ -21241,6 +21236,7 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
         }
       });
     },
+    handleFilePondInit: function handleFilePondInit() {},
     processFile: function processFile(e, f) {
       this.files.set(f.id, f.serverId);
     },
@@ -21340,35 +21336,22 @@ var FilePond = vue_filepond__WEBPACK_IMPORTED_MODULE_7___default()((filepond_plu
       });
     }
   },
-  computed: function computed() {
-    handleFilePondInit();
-    {
-      var files = [];
-
-      var _iterator = _createForOfIteratorHelper(this.document.files),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var file = _step.value;
-
-          if (file.uuid !== "undefined" && file.uuid !== undefined) {
-            files.push({
-              source: file.uuid,
-              options: {
-                type: 'local'
-              }
-            });
-          }
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      return files;
-    }
+  computed: function computed() {// handleFilePondInit()
+    // {
+    //     let files = [];
+    //     for (const file of this.document.files) {
+    //         if(file.uuid !== "undefined" && file.uuid !== undefined)
+    //         {
+    //             files.push({
+    //                 source: file.uuid,
+    //                 options: {
+    //                     type: 'local'
+    //                 },
+    //             });
+    //         }
+    //     }
+    //     return files;
+    // }
   },
   mounted: function mounted() {
     var _this4 = this;
@@ -27506,9 +27489,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     maxFileSize: "200MB",
     "allow-multiple": false,
     required: false,
-    "accepted-file-types": "application/pdf,image/jpeg, image/png",
+    "accepted-file-types": "application/pdf",
     server: "/filepond/api/process",
-    onInit: _ctx.handleFilePondInit,
+    onInit: $options.handleFilePondInit,
     allowBrowse: true,
     allowFileEncode: true,
     captureMethod: null,

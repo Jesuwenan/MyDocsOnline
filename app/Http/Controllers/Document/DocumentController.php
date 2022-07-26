@@ -88,8 +88,7 @@ class DocumentController extends Controller
             'description' => Request::get('description'),
             'date' => Request::get('date')
         ]);
-
-
+        
         $doc_access = Document_has_user::create([
             'user_id' => Auth::user()->id,
             'document_id' => $document->id 

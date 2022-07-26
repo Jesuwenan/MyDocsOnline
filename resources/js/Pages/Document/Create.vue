@@ -97,7 +97,7 @@
                             maxFileSize="200MB"
                             v-bind:allow-multiple="false"
                             v-bind:required="false"
-                            accepted-file-types="application/pdf,image/jpeg, image/png"
+                            accepted-file-types="application/pdf"
                             server="/filepond/api/process"
                             v-on:init="handleFilePondInit"
                             :allowBrowse="true"
@@ -170,9 +170,7 @@ export default {
     data() {
         return {
             sending: false,
-            form: {
-                
-                },
+            form: {},
             inputOptions:{
                 placeholder:'Entrez votre n° de téléphone'
             },
@@ -180,7 +178,7 @@ export default {
             selected: null,
             autocomplete: null,
             currentTab : 'details',
-
+            files: [],
         }
     },
     
@@ -193,8 +191,9 @@ export default {
                 
             })
         },
+        handleFilePondInit: function () {},
         processFile(e, f) {
-            this.files.set(f.id, f.serverId)
+            this.files.set(f.id, f.serverId);
         },
         removeFile: function (e, f) {
             this.files.delete(f.id);
@@ -298,24 +297,24 @@ export default {
     },
 
     computed () {
-        handleFilePondInit()
-        {
-            let files = [];
+        // handleFilePondInit()
+        // {
+        //     let files = [];
 
-            for (const file of this.document.files) {
-                if(file.uuid !== "undefined" && file.uuid !== undefined)
-                {
-                    files.push({
-                        source: file.uuid,
-                        options: {
-                            type: 'local'
-                        },
-                    });
-                }
-            }
+        //     for (const file of this.document.files) {
+        //         if(file.uuid !== "undefined" && file.uuid !== undefined)
+        //         {
+        //             files.push({
+        //                 source: file.uuid,
+        //                 options: {
+        //                     type: 'local'
+        //                 },
+        //             });
+        //         }
+        //     }
 
-            return files;
-        }
+        //     return files;
+        // }
     
     },
     mounted () {
