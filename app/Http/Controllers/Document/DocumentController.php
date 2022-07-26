@@ -49,7 +49,6 @@ class DocumentController extends Controller
         $category = Category::get('nom')->pluck('nom');
         // dd($category);
         return Inertia::render('Document/Create',[
-
             'categories' => $category
         ]);
     }
@@ -70,7 +69,7 @@ class DocumentController extends Controller
             'niveau_access' => ['required','integer'],
             'slug' => ['string','max:225'],
             'password' => ['string','max:225','nullable'],
-            'categorie' => ['required','integer'],
+            'category' => ['required','integer'],
             'description' => ['required','string'],
             'path' => ['required','file'],
             'date' => ['required']
@@ -78,7 +77,6 @@ class DocumentController extends Controller
         ]);
 
         $document = Document::create([
-
             'titre' => Request::get('titre'),
             'user_id' => Auth::user()->id,
             'auteur' => Request::get('auteur'),
@@ -86,24 +84,16 @@ class DocumentController extends Controller
             'path' => 'Directory\'somethere',
             'slug' => Str::slug(Request::get('slug')),
             'password' => Hash::make(Request::get('password')),
-            'category_id' => Request::get('categorie'),
+            'category_id' => Category::find(Request::get('category'))->id,
             'description' => Request::get('description'),
             'date' => Request::get('date')
-        
         ]);
 
-        $document->save();
 
         $doc_access = Document_has_user::create([
-
             'user_id' => Auth::user()->id,
             'document_id' => $document->id 
-        
         ]);
-
-        $doc_access->save();
-
-        
 
         return Redirect::route('documents.index')->with('success', 'document créé avec succès.');        
     }

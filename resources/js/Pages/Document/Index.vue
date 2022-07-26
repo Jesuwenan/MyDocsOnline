@@ -19,7 +19,7 @@
                             </inertia-link>
                         </div>
                     </div>
-                    <div v-show="fullScreenModalIsOpen">
+                    <!-- <div v-show="fullScreenModalIsOpen">
                         <full-screen-modal @closeFullSreenModal='closeFullSreenModal()' :is-open="fullScreenModalIsOpen">
                             <template #content>
                                     
@@ -45,15 +45,15 @@
                                         <form @submit.prevent="submit">
                                             
                                             <VueMultiselect
-                                            class="mt-1 mb-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                            v-model="user_to_share_document" 
-                                            :multiple="false"
-                                            label = "username"
-                                            track-by = 'id'  
-                                            placeholder="Utilisateur"
-                                            open-direction="bottom"
-                                            :option-height="100"
-                                            :options="persons">
+                                                class="mt-1 mb-2 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                                                v-model="user_to_share_document" 
+                                                :multiple="false"
+                                                label = "username"
+                                                track-by = 'id'  
+                                                placeholder="Utilisateur"
+                                                open-direction="bottom"
+                                                :option-height="100"
+                                                :options="persons">
                                             </VueMultiselect>
                                             <button class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                                 Partager
@@ -83,7 +83,7 @@
                                     
                             </template>
                         </full-screen-modal>
-                    </div>
+                    </div> -->
                     <div class="mt-3 sm:mt-0 sm:ml-4">
                     </div>
                 </div>      
@@ -368,8 +368,8 @@ export default {
     layout: AppLayout,
     props: {
         documents: Object,
-        persons: Object,
-        groupes: Object
+        // persons: Object,
+        // groupes: Object
     },
     data() {
         return {

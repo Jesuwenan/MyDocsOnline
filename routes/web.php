@@ -36,7 +36,10 @@ use App\Http\Controllers\Consummations\ConsummationController;
 
     Route::redirect('/', 'login');
 
-    Route::redirect('dashboard', 'documents');
+    Route::redirect('dashboard', 'users');
+
+    Route::resource('users', UserController::class)
+        ->middleware('auth:sanctum');
 
     Route::resource('documents', DocumentController::class)
         ->middleware('auth:sanctum');
