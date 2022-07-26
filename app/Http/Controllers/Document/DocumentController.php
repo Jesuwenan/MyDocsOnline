@@ -63,6 +63,8 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
+
+        dd(Request::all());
         
         $validator = Request::validate([
 

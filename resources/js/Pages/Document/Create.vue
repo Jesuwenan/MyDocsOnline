@@ -46,9 +46,10 @@
                             <label class="block text-sm font-medium text-gray-700" for="Categorie">Categorie *:</label>
                             <VueMultiselect
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                v-model="form.category_id" 
+                                v-model="category" 
                                 label="nom"
                                 track-by="id"
+                                @select="categorySelection"
                                 :multiple="false" 
                                 open-direction="bottom"
                                 :option-height="100"
@@ -172,6 +173,7 @@ export default {
     data() {
         return {
             sending: false,
+            category:null,
             form: {
                 titre: null,
                 auteur: null,
@@ -195,6 +197,11 @@ export default {
     },
     
     methods: {
+        
+        categorySelection(data){
+            this.form.category_id = data.id
+            this.category = data
+        },
         submit() {
             
             Object.entries(this.files).map(serverId => this.form.files.push(f.serverId));
