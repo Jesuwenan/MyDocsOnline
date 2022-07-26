@@ -23,9 +23,9 @@ class AdminsSeeder extends Seeder
                 'last_name' => 'ZANNOU',
                 'username' => 'Samfinder',
                 'sexe' => 'Masculin',
-                //'email' => 'zsamuel737@gmail.com',
+                'email' => 'zsamuel737@gmail.com',
                 'phone' => 91137630,
-                'email' => 'admin@facilesolution.com',
+                //'email' => 'admin@facilesolution.com',
                 'password' => Hash::make('azertyui'),
                 'is_admin'    => true
             ],
