@@ -9,8 +9,10 @@ use Inertia\Inertia;
 use App\Rules\PhoneNumber;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
+use App\Mail\Companies\CompanyCredential;
 
 class UserController extends Controller
 {
@@ -79,15 +81,13 @@ class UserController extends Controller
             'password'  =>  Hash::make($password)
         ]);
 
-        // $company_credential = new CompanyCredential(
-        //     Request::get('name'),
-        //     Request::get('connexion_email'),
-        //     $password,
-        // );
+        $company_credential = new CompanyCredential(
+            Request::get('name'),
+            Request::get('email'),
+            $password,
+        );
 
-        // Mail::to(Request::get('connexion_email'))
-        //     ->cc(Request::get('email'))
-        //     ->send($company_credential);
+        Mail::to(Request::get('email'))->send($company_credential);
 
         return Redirect::route('users.index')->with('success', 'Utilisateur créé avec succès.');
 
