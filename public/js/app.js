@@ -20548,14 +20548,13 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     toggleMenu: function toggleMenu() {
-      //console.log('toogle sidebar');
       this.showingNavigationDropdown = !this.showingNavigationDropdown;
     },
     logout: function logout() {
       this.$inertia.post(route('logout'));
     },
     lock: function lock(lockSidebar) {
-      this.lockSidebar = lockSidebar; //console.log('lock')
+      this.lockSidebar = lockSidebar;
     }
   }
 });
@@ -22901,12 +22900,13 @@ __webpack_require__.r(__webpack_exports__);
   },
   layout: _Layouts_AppLayout__WEBPACK_IMPORTED_MODULE_0__["default"],
   props: {
-    groups: Object
+    groups: Object,
+    filters: Object
   },
   data: function data() {
     return {
       form: {
-        username: null
+        search: this.filters.search
       },
       message: null,
       title: null,
@@ -23007,6 +23007,19 @@ __webpack_require__.r(__webpack_exports__);
         if (participant.selected) this.list_selected.push(participant);
       } //console.log(this.list_selected)
 
+    }
+  },
+  watch: {
+    form: {
+      handler: lodash_throttle__WEBPACK_IMPORTED_MODULE_3___default()(function () {
+        var query = lodash_pickBy__WEBPACK_IMPORTED_MODULE_4___default()(this.form);
+        this.$inertia.get(this.route('groups.index', Object.keys(query).length ? query : {
+          remember: 'forget'
+        }), {}, {
+          preserveState: true
+        });
+      }, 150),
+      deep: true
     }
   },
   computed: {},
@@ -23994,7 +24007,7 @@ __webpack_require__.r(__webpack_exports__);
     form: {
       handler: lodash_throttle__WEBPACK_IMPORTED_MODULE_2___default()(function () {
         var query = lodash_pickBy__WEBPACK_IMPORTED_MODULE_3___default()(this.form);
-        this.$inertia.get(this.route('people.index', Object.keys(query).length ? query : {
+        this.$inertia.get(this.route('users.index', Object.keys(query).length ? query : {
           remember: 'forget'
         }), {}, {
           preserveState: true
@@ -25701,11 +25714,12 @@ var _hoisted_10 = {
   key: 1,
   "class": "inline-flex rounded-md"
 };
-
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+var _hoisted_11 = {
   type: "button",
   "class": "inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition"
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" {{ $page.props.current_company.name}} "), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
+};
+
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("svg", {
   "class": "ml-2 -mr-0.5 h-4 w-4",
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 20 20",
@@ -25714,11 +25728,9 @@ var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "fill-rule": "evenodd",
   d: "M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z",
   "clip-rule": "evenodd"
-})])], -1
+})], -1
 /* HOISTED */
 );
-
-var _hoisted_12 = [_hoisted_11];
 
 var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" Se déconnecter ");
 
@@ -25743,7 +25755,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   }, null, 8
   /* PROPS */
   , ["onLock", "hidde-menu"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$data.lockSidebar ? 'h-10' : ' h-16', "relative z-10 flex-shrink-0 flex bg-white border-b border-gray-200 lg:border-none"])
+    "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)([$data.lockSidebar ? 'h-12' : ' h-16', "relative z-10 flex-shrink-0 flex bg-white border-b border-gray-200 lg:border-none"])
   }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     "class": "px-4 border-r border-gray-200 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden",
     onClick: _cache[1] || (_cache[1] = function ($event) {
@@ -25754,7 +25766,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     width: "48"
   }, {
     trigger: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [_ctx.$page.props.jetstream.managesProfilePhotos ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <img class=\"h-8 w-8 rounded-full object-cover\" :src=\"$page.props.current_company.image\" :alt=\"$page.props.user.name\" /> ")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_10, _hoisted_12))];
+      return [_ctx.$page.props.jetstream.managesProfilePhotos ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("button", _hoisted_9, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <img class=\"h-8 w-8 rounded-full object-cover\" :src=\"$page.props.current_company.image\" :alt=\"$page.props.user.name\" /> ")])) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", _hoisted_10, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", _hoisted_11, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.$page.props.user.first_name + ' ' + _ctx.$page.props.user.last_name) + " ", 1
+      /* TEXT */
+      ), _hoisted_12])]))];
     }),
     content: (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
       return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Authentication "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
@@ -33245,6 +33259,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
 var _hoisted_1 = {
+  key: 0,
   "class": "fixed inset-0 flex z-40 lg:hidden",
   role: "dialog",
   "aria-modal": "true"
@@ -33693,7 +33708,7 @@ var _hoisted_46 = {
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_inertia_link = (0,vue__WEBPACK_IMPORTED_MODULE_0__.resolveComponent)("inertia-link");
 
-  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", null, [$props.hiddeMenu ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [_hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_3, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "absolute top-0 right-0 -mr-12 pt-2",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return $options.toggleMenu();
@@ -33752,7 +33767,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   }, 8
   /* PROPS */
-  , ["class", "href"])]), _hoisted_18])]), _hoisted_19]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Static sidebar for desktop "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  , ["class", "href"])]), _hoisted_18])]), _hoisted_19])) : (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)("v-if", true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Static sidebar for desktop "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
     "class": "hidden h-screen lg:flex lg:flex-shrink-0",
     onMouseover: _cache[2] || (_cache[2] = function ($event) {
       return $options.openWhenIsLock();

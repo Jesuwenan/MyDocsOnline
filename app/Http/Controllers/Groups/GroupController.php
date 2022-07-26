@@ -23,7 +23,8 @@ class GroupController extends Controller
     {
         
         return Inertia::render('Groups/Index', [
-            'groups' =>  Group::paginate(10)
+            'groups' =>  Group::filter(Request::only('search'))->paginate(10),
+            'filters' => Request::all('search'),
         ]);
     }
 

@@ -181,11 +181,12 @@ export default {
     layout: AppLayout,
     props: {
         groups: Object,
+        filters: Object,
     },
     data() {
         return {
             form: {
-                username: null
+                search: this.filters.search,
             },
         
             message: null,
@@ -295,9 +296,18 @@ export default {
             //console.log(this.list_selected)
         },
     },
-
+    watch: {
+        form: {
+        handler: throttle(function () {
+            let query = pickBy(this.form)
+            this.$inertia.get(this.route('groups.index', Object.keys(query).length ? query : { remember: 'forget' }), {}, { preserveState: true })
+        }, 150),
+        deep: true,
+        },
+    },
     computed: {
     },
+
 
     mounted() {
         if (this.form.event === null) {

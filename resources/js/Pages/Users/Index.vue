@@ -235,7 +235,7 @@ export default {
     form: {
       handler: throttle(function () {
         let query = pickBy(this.form)
-        this.$inertia.get(this.route('people.index', Object.keys(query).length ? query : { remember: 'forget' }), {}, { preserveState: true })
+        this.$inertia.get(this.route('users.index', Object.keys(query).length ? query : { remember: 'forget' }), {}, { preserveState: true })
       }, 150),
       deep: true,
     },
