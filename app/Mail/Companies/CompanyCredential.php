@@ -33,8 +33,8 @@ class CompanyCredential extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@facilesolution.com','CHARNOY')
-            ->subject('Notification de création de compte sur Charnoy')
+        return $this->from('noreply@facilesolution.com','ALLDOCSONLINE')
+            ->subject('Notification de création de compte sur ALLDOCSONLINE')
             ->markdown('email.companies.company_credential');
     }
 
