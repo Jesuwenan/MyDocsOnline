@@ -216,7 +216,7 @@ export default {
       this.sms_person_id = null
       this.mail_person_id = null
       this.title = 'Confirmation de suppression'
-      this.message = 'Êtes-vous sûr de vouloir supprimer cette personne?'
+      this.message = 'Êtes-vous sûr de vouloir supprimer cet utilisateur?'
     },
     cancel() {
       this.showModal = false
@@ -225,7 +225,7 @@ export default {
     confirm() {
       if (this.itemDeleteId) {
         this.showModal = false
-        this.$inertia.delete(this.route('people.destroy', this.itemDeleteId));
+        this.$inertia.delete(this.route('users.destroy', this.itemDeleteId));
       }
     },
 

@@ -23990,7 +23990,7 @@ __webpack_require__.r(__webpack_exports__);
       this.sms_person_id = null;
       this.mail_person_id = null;
       this.title = 'Confirmation de suppression';
-      this.message = 'Êtes-vous sûr de vouloir supprimer cette personne?';
+      this.message = 'Êtes-vous sûr de vouloir supprimer cet utilisateur?';
     },
     cancel: function cancel() {
       this.showModal = false;
@@ -23999,7 +23999,7 @@ __webpack_require__.r(__webpack_exports__);
     confirm: function confirm() {
       if (this.itemDeleteId) {
         this.showModal = false;
-        this.$inertia["delete"](this.route('people.destroy', this.itemDeleteId));
+        this.$inertia["delete"](this.route('users.destroy', this.itemDeleteId));
       }
     }
   },
