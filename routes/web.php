@@ -38,9 +38,6 @@ use App\Http\Controllers\Consummations\ConsummationController;
 
     Route::redirect('dashboard', 'documents');
 
-    Route::resource('users', UserController::class)
-        ->middleware('auth:sanctum');
-
     Route::resource('documents', DocumentController::class)
         ->middleware('auth:sanctum');
 
@@ -59,15 +56,15 @@ use App\Http\Controllers\Consummations\ConsummationController;
     Route::post('share', [DocumentController::class, 'share'])
     ->name('documents.share');
 
-        Route::post('user_share', [DocumentController::class, 'user_share'])
-        ->name('documents.user_share');
+    Route::post('user_share', [DocumentController::class, 'user_share'])
+    ->name('documents.user_share');
 
     Route::get('view_shared_docs', [DocumentController::class, 'view_shared_docs'])
         ->name('documents.view.sharedDocs');
 
     Route::get('view_document_shared', [DocumentController::class, 'share'])
         ->name('documents.share_docs');
-
+        
     Route::resource('people', PersonController::class)->middleware('auth:sanctum');
 
     Route::get('filepond/api/process', [FilepondController::class, 'show']);
