@@ -45,7 +45,7 @@
                             <label class="block text-sm font-medium text-gray-700" for="Categorie">Categorie *:</label>
                             <VueMultiselect
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                v-model="form.category" 
+                                v-model="form.category_id" 
                                 :multiple="false" 
                                 open-direction="bottom"
                                 :option-height="100"
@@ -102,6 +102,7 @@
                             :allowBrowse="true"
                             :allowFileEncode="true"
                             :captureMethod="null"
+                            :files="[ {source: document.uuid,options: { type: 'limbo' }}]"
                             @processfile="processFile"
                             @removefile="removeFile"
                             @addfile="addFile"/>
@@ -152,12 +153,12 @@ export default {
             form: {
                 titre: this.document.titre,
                 auteur: this.document.auteur,
-                category: this.document.categorie.nom,
+                category_id: this.document.category_id,
                 slug: this.document.slug,
                 date: this.document.date,
                 password: this.document.password,
-                description:this.document.description,
-                
+                description: this.document.description,
+                files: [this.document.uuid]
             },
             inputOptions:{
                 placeholder:'Entrez votre n° de téléphone'
@@ -165,17 +166,29 @@ export default {
             selected: null,
             autocomplete: null,
             currentTab : 'details',
-
+            files: new Map(),
         }
     },
     methods: {
         submit() {
             
+            Object.entries(this.files).map(serverId => this.form.files.push(f.serverId));
+
             this.$inertia.put(this.route('documents.update',this.document.id), this.form, {
                 onStart: () => this.sending = true,
                 onFinish: () => this.sending = false,
                 
             })
+        },
+        
+        processFile(e, f) {
+            this.files.set(f.id, f.serverId)
+        },
+        removeFile: function (e, f) {
+            this.files.delete(f.id);
+            this.form.files = this.form.files.filter(e => e != f.serverId)
+        },
+        addFile(e, f) {
         },
         searchPerson(){
 
@@ -337,36 +350,37 @@ export default {
     },
     mounted () {
 
-        //document.getElementById("company").focus();
-        this.autocomplete = new google.maps.places.Autocomplete(
-            /** @type {!HTMLInputElement}*/(this.$refs.address),
-            { types: ['geocode'] }
-        );
+        // //document.getElementById("company").focus();
+        // this.autocomplete = new google.maps.places.Autocomplete(
+        //     /** @type {!HTMLInputElement}*/(this.$refs.address),
+        //     { types: ['geocode'] }
+        // );
 
-        this.autocomplete.addListener('place_changed', () => {
-            const place = this.autocomplete.getPlace();
-            // contient le pays, la ville le code postal, etc...
-            for (let index = 0; index < place.address_components.length; index++) {
-                const element = place.address_components[index];
-                switch (element.types[0]) {
+        // this.autocomplete.addListener('place_changed', () => {
+        //     const place = this.autocomplete.getPlace();
+        //     // contient le pays, la ville le code postal, etc...
+        //     for (let index = 0; index < place.address_components.length; index++) {
+        //         const element = place.address_components[index];
+        //         switch (element.types[0]) {
                    
-                    case 'route':
-                        this.form.address  = element.short_name
-                        break;
-                    case 'locality':
-                        this.form.city  = element.long_name
-                        break;
-                    case 'postal_code':
-                        this.form.postal_code  = element.long_name
-                        break;
-                    default:
-                        break;
-                }
+        //             case 'route':
+        //                 this.form.address  = element.short_name
+        //                 break;
+        //             case 'locality':
+        //                 this.form.city  = element.long_name
+        //                 break;
+        //             case 'postal_code':
+        //                 this.form.postal_code  = element.long_name
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
                 
-            }
+        //     }
 
-        });
-    },
+        // });
+
+},
     
 }
 </script>

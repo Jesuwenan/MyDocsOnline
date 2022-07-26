@@ -46,13 +46,15 @@
                             <label class="block text-sm font-medium text-gray-700" for="Categorie">Categorie *:</label>
                             <VueMultiselect
                                 class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                                v-model="form.category" 
+                                v-model="form.category_id" 
+                                label="nom"
+                                track-by="id"
                                 :multiple="false" 
                                 open-direction="bottom"
                                 :option-height="100"
                                 :options="categories">
                             </VueMultiselect>
-                            <div v-if="errors.categorie" class="text-red-700 mt-2 text-sm">{{ errors.categorie }}</div>
+                            <div v-if="errors.category_id" class="text-red-700 mt-2 text-sm">{{ errors.category_id }}</div>
                         </div>
                         
                         <div class="col-span-3 sm:col-span-3">
@@ -171,8 +173,16 @@ export default {
         return {
             sending: false,
             form: {
-                
-                },
+                titre: null,
+                auteur: null,
+                category_id: null,
+                date: null,
+                slug: null,
+                password: null,
+                description: null,
+                titre: null,
+                files: [],
+            },
             inputOptions:{
                 placeholder:'Entrez votre n° de téléphone'
             },
@@ -180,12 +190,14 @@ export default {
             selected: null,
             autocomplete: null,
             currentTab : 'details',
-
+            files: new Map(),
         }
     },
     
     methods: {
         submit() {
+            
+            Object.entries(this.files).map(serverId => this.form.files.push(f.serverId));
             
             this.$inertia.post(this.route('documents.store'), this.form, {
                 onStart: () => this.sending = true,
@@ -320,39 +332,40 @@ export default {
     },
     mounted () {
 
-        if(!this.$page.props.user.is_admin)
-        {
-            this.companySelection(this.$page.props.user.company)
-        }
+        // if(!this.$page.props.user.is_admin)
+        // {
+        //     this.companySelection(this.$page.props.user.company)
+        // }
         
-        this.autocomplete = new google.maps.places.Autocomplete(
-            /** @type {!HTMLInputElement}*/(this.$refs.address),
-            { types: ['geocode'] }
-        );
+        // this.autocomplete = new google.maps.places.Autocomplete(
+        //     /** @type {!HTMLInputElement}*/(this.$refs.address),
+        //     { types: ['geocode'] }
+        // );
         
-        this.autocomplete.addListener('place_changed', () => {
-            const place = this.autocomplete.getPlace();
-            // contient le pays, la ville le code postal, etc...
-            for (let index = 0; index < place.address_components.length; index++) {
-                const element = place.address_components[index];
-                switch (element.types[0]) {
+        // this.autocomplete.addListener('place_changed', () => {
+        //     const place = this.autocomplete.getPlace();
+        //     // contient le pays, la ville le code postal, etc...
+        //     for (let index = 0; index < place.address_components.length; index++) {
+        //         const element = place.address_components[index];
+        //         switch (element.types[0]) {
                     
-                    case 'route':
-                        this.form.address  = element.short_name
-                        break;
-                    case 'locality':
-                        this.form.city  = element.long_name
-                        break;
-                    case 'postal_code':
-                        this.form.postal_code  = element.long_name
-                        break;
-                    default:
-                        break;
-                }
+        //             case 'route':
+        //                 this.form.address  = element.short_name
+        //                 break;
+        //             case 'locality':
+        //                 this.form.city  = element.long_name
+        //                 break;
+        //             case 'postal_code':
+        //                 this.form.postal_code  = element.long_name
+        //                 break;
+        //             default:
+        //                 break;
+        //         }
                 
-            }
+        //     }
 
-        });
+        // });
+    
     },
     
 }

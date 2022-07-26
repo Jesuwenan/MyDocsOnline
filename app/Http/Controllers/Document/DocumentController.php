@@ -14,8 +14,9 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Response;
 use App\Models\Document\Document_has_user;
-use App\Models\Document\Groupe;
+use App\Models\Groups\Group;
 use App\Models\People\Person;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -28,13 +29,14 @@ class DocumentController extends Controller
     {
         
         $document = Document::where('user_id', Auth::user()->id)->with('categorie')->get();
-        // $person = Person::get();
-        // $group = Groupe::get();
+        $person = Person::get();
+        $group = Group::get();
+        // dd($person);
         return Inertia::render('Document/Index',[
 
             'documents' => $document,
-            // 'persons' => $person,
-            // 'groupes' => $group
+            'persons' => $person,
+            'groupes' => $group
         ]
         );
     }
@@ -46,10 +48,9 @@ class DocumentController extends Controller
      */
     public function create()
     {
-        $category = Category::get('nom')->pluck('nom');
-        // dd($category);
+        $category = Category::all()->toArray();
+        // dd($category->toArray());
         return Inertia::render('Document/Create',[
-
             'categories' => $category
         ]);
     }
@@ -67,12 +68,13 @@ class DocumentController extends Controller
 
             'titre' => ['required','string','max:225'],
             'auteur' => ['required','string','max:255'],
-            'niveau_access' => ['required','integer'],
+            // 'niveau_access' => ['required','integer'],
+            'files' => ['required','array'],
             'slug' => ['string','max:225'],
             'password' => ['string','max:225','nullable'],
-            'categorie' => ['required','integer'],
+            'category_id' => 'required|numeric|exists:categories,id',
             'description' => ['required','string'],
-            'path' => ['required','file'],
+            // 'path' => ['required','file'],
             'date' => ['required']
         
         ]);
@@ -83,10 +85,9 @@ class DocumentController extends Controller
             'user_id' => Auth::user()->id,
             'auteur' => Request::get('auteur'),
             'niveau_access' => 1,
-            'path' => 'Directory\'somethere',
             'slug' => Str::slug(Request::get('slug')),
             'password' => Hash::make(Request::get('password')),
-            'category_id' => Request::get('categorie'),
+            'category_id' => Request::get('category_id'),
             'description' => Request::get('description'),
             'date' => Request::get('date')
         
@@ -102,8 +103,58 @@ class DocumentController extends Controller
         ]);
 
         $doc_access->save();
-
         
+        if (Request::get('files')) {
+            $filepond = app(Filepond::class);
+
+            foreach (Request::get('files') as $id) {
+                $path = $filepond->getPathFromServerId($id);
+                $path = str_replace("\\", '/', $path);
+
+                $parts = explode('/', $path);
+                $size = sizeof($parts);
+                $name = $parts[$size - 1];
+
+                $relativePath = implode(
+                    "/", 
+                    [$parts[$size - 3], $parts[$size - 2], $parts[$size - 1], ]
+                );
+
+                $relativeDir = implode(
+                    "/", 
+                    [$parts[$size - 3], $parts[$size - 2],]
+                );
+
+                $document->path = $path;
+                $document->uuid = $id;
+
+                // CustomerHasFile::create([
+                //     'name' => $name,
+                //     'size' => Storage::disk("s3")->size($relativePath),
+                //     'mime' => Storage::disk(config('filepond.temporary_files_disk', 'local'))->mimeType($relativePath),
+                //     'path'       => $path,
+                //     'uuid'       => $id,
+                //     'small_uuid' => $parts[$size - 2],
+                //     'customer_id' =>  $customer->id,
+                // ]);
+
+                $contents = Storage::disk("s3")->get($relativePath);
+                // $img = Image::make($contents)->resize(1000)->encode('jpg', 80);
+                if(Storage::put($relativePath, $contents, 's3'))
+                {
+                    Storage::disk(config('filepond.temporary_files_disk', 'local'))->delete($relativePath);
+                    Storage::disk(config('filepond.temporary_files_disk', 'local'))->deleteDirectory($relativeDir);
+                }
+
+                $document->path = $path;
+                $document->uuid = $id;
+                $document->mime =  Storage::disk(config('filepond.temporary_files_disk', 'local'))->mimeType($relativePath);
+                $document->size = Storage::disk("s3")->size($relativePath);
+                $document->small_uuid = $parts[$size - 2];
+                $document->name = $name;
+                $document->save();
+            }
+        }
 
         return Redirect::route('documents.index')->with('success', 'document créé avec succès.');        
     }
@@ -118,12 +169,10 @@ class DocumentController extends Controller
         $file = $document->path;
 
         $headers = array(
-            'Content-Type: Application/pdf',
+            'Content-Type: '.($document->mime),
         );
 
         return Response::download($file, $document->titre, $headers);
-
-        
     }
 
     public function read(Request $request){
@@ -136,7 +185,7 @@ class DocumentController extends Controller
         $file = $document->path;
 
         $headers = array(
-            'Content-Type: Application/pdf',
+            'Content-Type: '.($document->mime),
         );
 
         return Response()->file($file,$headers);
@@ -183,7 +232,7 @@ class DocumentController extends Controller
             return Redirect::route('documents.index')->with('success', 'document partagé avec succès.');
         }
         if(Request::get('group_id') != null OR Request::get('group_id') != ''){
-            $group_members = Groupe::where('id', Request::get('group_id'))->get()->pluck('user_id');
+            $group_members = group::where('id', Request::get('group_id'))->get()->pluck('user_id');
 
             // dd($group_members);
             foreach ($group_members as $group_member){
@@ -204,7 +253,7 @@ class DocumentController extends Controller
             'group_id' => ['required','integer']
         ]);
         
-        $group_members = Groupe::where('id', Request::get('group_id'))->get();
+        $group_members = group::where('id', Request::get('group_id'))->get();
 
         foreach ($group_members as $group_member){
 
@@ -224,8 +273,9 @@ class DocumentController extends Controller
      */
     public function edit($id)
     {
-        $categories = Category::all()->pluck('nom');
+        $categories = Category::all()->toArray();
         $document = Document::where('id',$id)->with('categorie')->first();
+
         return Inertia::render('Document/Edit', [
             'document' => $document,
             'categories' => $categories
@@ -245,12 +295,13 @@ class DocumentController extends Controller
 
             'titre' => ['required','string','max:225'],
             'auteur' => ['required','string','max:255'],
-            'niveau_access' => ['required','integer'],
+            // 'niveau_access' => ['required','integer'],
             'slug' => ['string','max:225'],
             'password' => ['string','max:225','nullable'],
-            'categorie' => ['required','integer'],
+            'category_id' => 'required|numeric|exists:categories,id',
+            // 'categorie' => ['required','integer'],
             'description' => ['required','string'],
-            'path' => ['required','file'],
+            'files' => ['required','array'],
             'date' => ['required']
 
         ]);
@@ -263,14 +314,53 @@ class DocumentController extends Controller
             'user_id' => Auth::user()->id,
             'auteur' => Request::get('auteur'),
             'niveau_access' => 1,
-            'path' => 'Directory\'somethere',
+            // 'path' => 'Directory\'somethere',
             'slug' => Str::slug(Request::get('slug')),
             'password' => Hash::make(Request::get('password')),
-            'category_id' => Request::get('categorie'),
+            'category_id' => Request::get('category_id'),
             'description' => Request::get('description'),
             'date' => Request::get('date')
 
         ]);
+        
+        if (Request::get('files')) {
+            $filepond = app(Filepond::class);
+
+            foreach (Request::get('files') as $id) {
+                $path = $filepond->getPathFromServerId($id);
+                $path = str_replace("\\", '/', $path);
+
+                $parts = explode('/', $path);
+                $size = sizeof($parts);
+                $name = $parts[$size - 1];
+
+                $relativePath = implode(
+                    "/", 
+                    [$parts[$size - 3], $parts[$size - 2], $parts[$size - 1], ]
+                );
+
+                $relativeDir = implode(
+                    "/", 
+                    [$parts[$size - 3], $parts[$size - 2],]
+                );
+
+                $contents = Storage::disk("s3")->get($relativePath);
+                // $img = Image::make($contents)->resize(1000)->encode('jpg', 80);
+                if(Storage::put($relativePath, $contents, 's3'))
+                {
+                    Storage::disk(config('filepond.temporary_files_disk', 'local'))->delete($relativePath);
+                    Storage::disk(config('filepond.temporary_files_disk', 'local'))->deleteDirectory($relativeDir);
+                }
+
+                $document->path = $path;
+                $document->uuid = $id;
+                $document->mime =  Storage::disk(config('filepond.temporary_files_disk', 'local'))->mimeType($relativePath);
+                $document->size = Storage::disk("s3")->size($relativePath);
+                $document->small_uuid = $parts[$size - 2];
+                $document->name = $name;
+                $document->save();
+            }
+        }
 
         return Redirect::route('documents.index')->with('success', 'Document modifié avec succès.');
 
