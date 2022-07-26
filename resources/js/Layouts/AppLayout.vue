@@ -4,7 +4,7 @@
         <sidebar @lock="lock" @hidde="toggleMenu()" :hidde-menu="showingNavigationDropdown" />
         
         <div class="flex-1 overflow-auto focus:outline-none" tabindex="0">
-            <div :class="lockSidebar ? 'h-10' : ' h-16'" class="relative z-10 flex-shrink-0 flex bg-white border-b border-gray-200 lg:border-none">
+            <div :class="lockSidebar ? 'h-12' : ' h-16'" class="relative z-10 flex-shrink-0 flex bg-white border-b border-gray-200 lg:border-none">
                 <button class="px-4 border-r border-gray-200 text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden" @click="toggleMenu()">
                     <span class="sr-only">Open sidebar</span>
                     <!-- Heroicon name: outline/menu-alt-1 -->
@@ -28,7 +28,7 @@
 
                                     <span v-else class="inline-flex rounded-md">
                                         <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
-                                            <!-- {{ $page.props.current_company.name}} -->
+                                            {{ $page.props.user.first_name + ' ' + $page.props.user.last_name }}
                                             <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                                 <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                             </svg>
@@ -94,7 +94,6 @@
             },
             toggleMenu()
             {
-                //console.log('toogle sidebar');
                 this.showingNavigationDropdown = !this.showingNavigationDropdown
             },
             logout() {
@@ -102,7 +101,6 @@
             },
             lock(lockSidebar){
                 this.lockSidebar = lockSidebar
-                //console.log('lock')
             },
         }
     }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Groups\Group;
 use App\Models\Document\Groupe;
 use Illuminate\Database\Seeder;
 
@@ -14,29 +15,29 @@ class GroupSeeder extends Seeder
      */
     public function run()
     {
-        $data = [
-            [
-                'user_id' => 1,
-                'group_name' => 'Mes amis'
-            ],
-            [
-                'user_id' => 1,
-                'group_name' => 'Famille ZANNOU'
-            ],
-            [
-                'user_id' => 1,
-                'group_name' => 'Famille AGOSSOU'
-            ],
-            [
-                'user_id' => 1,
-                'group_name' => 'Travail de groupe'
-            ],
+        // $data = [
+        //     [
+        //         'owner_id' => 1,
+        //         'name' => 'Mes amis'
+        //     ],
+        //     [
+        //         'owner_id' => 1,
+        //         'name' => 'Famille ZANNOU'
+        //     ],
+        //     [
+        //         'owner_id' => 1,
+        //         'name' => 'Famille AGOSSOU'
+        //     ],
+        //     [
+        //         'owner_id' => 1,
+        //         'name' => 'Travail de groupe'
+        //     ],
 
             
-        ];
-        foreach ($data as $row){
-            $document = Groupe::firstOrCreate($row);
-        }
+        // ];
+        // foreach ($data as $row){
+        //     $document = Group::firstOrCreate($row);
+        // }
         
     }
 }

@@ -3,23 +3,25 @@
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Document\DocumentShared;
 use Illuminate\Support\Facades\Request;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\Bars\BarController;
 use App\Http\Controllers\FilepondController;
 use App\Http\Controllers\Helps\HelpController;
 use App\Http\Controllers\Events\EventController;
+use App\Http\Controllers\Groups\GroupController;
+// use App\Http\Controllers\Companies\CompanyController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Events\ScanQrController;
 use App\Http\Controllers\People\PersonController;
-// use App\Http\Controllers\Companies\CompanyController;
+use App\Http\Controllers\Document\GroupeController;
+use App\Http\Controllers\Document\DocumentController;
 use App\Http\Controllers\Responses\ResponseController;
+use App\Http\Controllers\Document\DocumentSharedController;
 use App\Http\Controllers\Participants\ParticipantController;
 use App\Http\Controllers\Consummation\ConsummationsController;
 use App\Http\Controllers\Consummations\ConsummationController;
-use App\Http\Controllers\Document\DocumentController;
-use App\Http\Controllers\Document\DocumentSharedController;
-use App\Http\Controllers\Document\GroupeController;
-use App\Models\Document\DocumentShared;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,17 +36,21 @@ use App\Models\Document\DocumentShared;
 
     Route::redirect('/', 'login');
 
-    // Route::redirect('register', 'register');
-
     Route::redirect('dashboard', 'documents');
 
+<<<<<<< HEAD
+=======
+    Route::resource('users', UserController::class)
+        ->middleware('auth:sanctum');
+
+>>>>>>> 5daa86de892595eecd061452383aadfe35a7e55e
     Route::resource('documents', DocumentController::class)
         ->middleware('auth:sanctum');
 
     Route::resource('document_share', DocumentController::class)
     ->middleware('auth:sanctum');
 
-    Route::resource('groupe', GroupeController::class)
+    Route::resource('groups', GroupController::class)
         ->middleware('auth:sanctum');
 
     Route::post('addMemberToGroup/{id}',[GroupeController::class, 'addMemberToGroup'])
@@ -64,7 +70,11 @@ use App\Models\Document\DocumentShared;
 
     Route::get('view_document_shared', [DocumentController::class, 'share'])
         ->name('documents.share_docs');
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 5daa86de892595eecd061452383aadfe35a7e55e
     Route::resource('people', PersonController::class)->middleware('auth:sanctum');
 
     Route::get('filepond/api/process', [FilepondController::class, 'show']);
